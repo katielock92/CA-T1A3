@@ -74,6 +74,34 @@ The tasks and code required here are:
         - *else* an invalid prompt is entered, the user will receive an error prompt on screen and they will be asked to try again (*loop* restarts)
 
 ### **Quiz**
+If option 1 is selected from the main menu:
+- a new inner *quiz loop* will commence:
+    - *if* at any time the quit command is entered, this will override any other function:
+        - a display message will advise the user that quitting while the quiz is in progress will result in their progress being lost
+        - an *input prompt* will ask the user to confirm that they want to quit:
+            - *if* the user confirms to quit, an *except* error will occur, gracefully exiting the application
+            - *else* any other input received, a message will display confirming that the quiz will not quit, and the application will loop back to where it was previously
+    - the question count will be checked to confirm it is <= 20:
+        - *if* true, a question will be selected at random from the quiz questions file, and a *question loop* will begin:
+            - an *input prompt* will ask the user to return a multi-choice answer:
+                - *if* the correct answer is received, a count will be added to the user score and the *quiz loop* will continue
+                - *else if* the incorrect answer is received, no count will be added to the user score and the *quiz loop* will continue
+                - *else* an invalid response is entered, the user is displayed a message and the *question loop* will continue
+        - once the question count reaches > 20:
+            - check if there is an existing .csv file for previous results
+                - *if not*, create a new file
+            - the user's score is the date is added to the previous results file
+            - *if* the user received a passing score:
+                - write their user ID and the date to the certified players file
+                - display the user score and outcome of the quiz
+                - an *input prompt* asking if the user wants to return to the main menu:
+                    - *if* main menu, return to start of outer loop
+                    - *else* an *except* error will occur, gracefully exiting the application
+            - *else* the user did not receive a passing score:
+                - display the user score and outcome of the quiz
+                - an *input prompt* asking if the user wants to try again
+                    - *if* yes, return to the start of the *quiz loop*
+                    - *else* return to the main menu (*outer loop*)
 
 ### **User's previous results**
 If option 2 is selected from the main menu:
@@ -85,27 +113,33 @@ If option 2 is selected from the main menu:
         - *if* main menu, return to start of outer loop
         - *else* an *except* error will occur, gracefully exiting the application
 ### **Certified players**
+If option 3 is selected from the main menu:
+- the contents of the certified players file will be displayed to the user
+- an *input prompt* asking if the user wants to return to the main menu:
+    - *if* main menu, return to start of outer loop
+    - *else* an *except* error will occur, gracefully exiting the application
 
 
-
-To meet the assessment requirements for this application, we need to import at least **four** Python packages and *extensively use* functions from at least one of these.
+### **Packages**
+In addition to the use of variables, loops, control flow and functions (to make the above features happen), we need to utilise Python packages.  For this assessment, we need to import at least **four** Python packages and *extensively use* functions from at least one of these.
 
 The following packages will be used in our application:
 - **csv:**
-    - Purpose: x
-    - URL: https://docs.python.org/3/library/csv.html#module-csv
+    - *Purpose:* to allow us to create, read and write to .csv files in our application.
+    - *URL:* https://docs.python.org/3/library/csv.html#module-csv
 - **datetime:** 
-    - Purpose: x
-    - URL: https://docs.python.org/3/library/datetime.html#module-datetime
+    - *Purpose:* to allow us to access the date and time of the user when they are running our application. This will us to write the date of quiz attempts into the .csv files in features 4 and 5.
+    - *URL:* https://docs.python.org/3/library/datetime.html#module-datetime
 - **random:**
-    - Purpose: x
-    - URL: https://docs.python.org/3/library/random.html#module-random
+    - *Purpose:* x
+    - *URL:* https://docs.python.org/3/library/random.html#module-random
 - **venv:**
-    - Purpose: x
-    - URL: https://docs.python.org/3/library/venv.html#module-venv
+    - *Purpose:* x
+    - *URL:* https://docs.python.org/3/library/venv.html#module-venv
 - **colored:**
-    - Purpose: 
-    - URL: https://pypi.org/project/colored/
+    - *Purpose:* to allow us to use colours in our terminal application, making it easier for the user to operate given there is no GUI.
+    - *URL:* https://pypi.org/project/colored/
+
 
 
 
