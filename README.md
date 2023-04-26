@@ -118,8 +118,6 @@ If option 3 is selected from the main menu:
 - an *input prompt* asking if the user wants to return to the main menu:
     - *if* main menu, return to start of outer loop
     - *else* an *except* error will occur, gracefully exiting the application
-
-
 ### **Packages**
 In addition to the use of variables, loops, control flow and functions (to make the above features happen), we need to utilise Python packages.  For this assessment, we need to import at least **four** Python packages and *extensively use* functions from at least one of these.
 
@@ -140,7 +138,18 @@ The following packages will be used in our application:
     - *Purpose:* to allow us to use colours in our terminal application, making it easier for the user to operate given there is no GUI.
     - *URL:* https://pypi.org/project/colored/
 
+### **Testing and TDD**
+Another requirement of the application is that there are **at least TWO** tests.  Ideally we should follow Test-Driven Development (TDD) and write these tests prior to coding the features, so this needs to be factored into our timeline and prioritisation.
 
+### **Timeline and Prioritisation**
+Due to a combination of the features's priority, complexity and relationship with other features, I plan to prioritise the initial development of features in the following order:
+1. *Main menu* - this serves as the main loop for 3 of the other features, but has no dependency on the registration/login feature being developed first. This feature is also the only feature not to include any file handling, so is a simple starting point to commence development.
+2. *User registration and login* - as the 3 remaining features rely on data captured or validated in this feature, we need this feature operational first before we can commence development on those.
+3. *Quiz* - this is the flagship feature of our application, and it would serve little purpose without it.  The main menu and registration/login lay the foundations for the user experience, but it's important that the quiz itself is operational for our app to have purpose.
+4. *User's previous results* - this feature provides context and confirmation that the data writing from the quiz is working as expected, and allows the user to validate previous interactions with the app. It's prioritised below the other features as it is not as essential, though still beneficial.
+5. *Certified players* - this feature is prioritised last as it serves as a "nice to have" and would be beneficial if we have time, though is limited in scope while there is no server for our application.
+
+Now that the feature priorities have been established, a project management board can be set up. I have opted to use Trello due to my existing experience with it, along with the fact that the basic version is free.  In addition to being included in the "Links" section, here is the URL of the Trello board for my project: https://trello.com/b/93Hv7cLh/t1a3-terminal-application-project-management
 
 
 ___
