@@ -4,6 +4,27 @@ import csv
 import datetime
 import random
 
+class User:
+    def __init__ (self, email, password):
+        self.email = email
+        self.password = password
+
+def login(User):
+    email = input("Please enter your email address: ")
+    # check if email is in csv file
+    # if email is registered, prompt for password
+    # placeholder code:
+    if email == "0":
+        print("Welcome back!")
+        password = input("Please enter your password: ")
+    else:
+        print("To sign up, please enter a password that is at least 10 characters in length.")
+        password = input("New password: ")
+        if len(password) <10:
+            print("Password is too short. Please try again.")
+            password = input("New password: ")
+    # if email is not registered, validate the format then ask them to set a new password
+
 def main_menu():
     display_menu = True
     while display_menu:
@@ -33,6 +54,3 @@ def main_menu():
             print("Invalid menu option selected! Please try again.")
             print("Here's the menu again for you...")
             continue
-
-# remove later - but calling function to test it operates as expected
-main_menu()
