@@ -4,12 +4,17 @@ import csv
 import datetime
 import random
 
+
 class User:
-    def __init__ (self, email, password):
+    def __init__(self, email, password, user_id):
         self.email = email
         self.password = password
+        self.user_id = user_id
+
 
 def login(User):
+    # list of column names
+    registered_users_rows = ['user_email', 'user_password', 'user_id']
     email = input("Please enter your email address: ")
     # check if email is in csv file
     # if email is registered, prompt for password
@@ -17,23 +22,35 @@ def login(User):
     if email == "0":
         print("Welcome back!")
         password = input("Please enter your password: ")
+        # validate password
     else:
-        print("To sign up, please enter a password that is at least 10 characters in length.")
+        # if email is not registered, validate the format then ask them to set a new password
+        print(
+            "To sign up, please enter a password that is at least 10 characters in length.")
         password = input("New password: ")
-        if len(password) <10:
+        if len(password) < 10:
             print("Password is too short. Please try again.")
             password = input("New password: ")
-    # if email is not registered, validate the format then ask them to set a new password
+        user_id = random.randint(1000, 50000)
+        # check user_id is unique, otherwise run again
+        login_details = {
+            "user_email": email,
+            "user_password": password,
+            "user_id": user_id
+        }
+        with open('./src/registered_users.csv', 'a') as csv_file:
+            dict_object = csv.DictWriter(
+                csv_file, fieldnames=registered_users_rows)
+            dict_object.writerow(login_details)
+        print(f"\nWelcome! Your user ID is {user_id}\n")
+
 
 def main_menu():
     display_menu = True
     while display_menu:
-        print("WFDF RULES OF ULTIMATE ACCREDITATION APP - MAIN MENU")
-        print("1: Begin the Rules Accreditation Quiz")
-        print("2: See your previous results")
-        print("3: Access the database of certified players")
-        print("4: Exit application")
-        menu_selection = input("Please select an option by entering the menu number: ")
+        print("\nWFDF RULES OF ULTIMATE ACCREDITATION APP - MAIN MENU\n\n1: Begin the Rules Accreditation Quiz\n2: See your previous results\n3: Access the database of certified players\n4: Exit application\n")
+        menu_selection = input(
+            "Please select an option by entering the menu number: ")
         if menu_selection == "1":
             display_menu = False
             print("Option 1 selected!")
@@ -48,8 +65,8 @@ def main_menu():
             # add certified players feature here
         elif menu_selection == "4":
             display_menu = False
-            print("Option 4 selected!") 
-            # add exit protocol here 
+            print("Option 4 selected!")
+            # add exit protocol here
         else:
             print("Invalid menu option selected! Please try again.")
             print("Here's the menu again for you...")
