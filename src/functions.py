@@ -1,8 +1,11 @@
 # import any packages required here
 
 import csv
+import pandas
 import datetime
 import random
+
+# establishing class for the user
 
 
 class User:
@@ -12,37 +15,54 @@ class User:
         self.user_id = user_id
 
 
+# setting up file handling
+registered_users_rows = ['user_email', 'user_password', 'user_id']
+users_csv = pandas.read_csv('./src/registered_users.csv')
+
+# login/registration feature
+
 def login(User):
-    # list of column names
-    registered_users_rows = ['user_email', 'user_password', 'user_id']
     email = input("Please enter your email address: ")
-    # check if email is in csv file
-    # if email is registered, prompt for password
-    # placeholder code:
-    if email == "0":
-        print("Welcome back!")
-        password = input("Please enter your password: ")
-        # validate password
-    else:
-        # if email is not registered, validate the format then ask them to set a new password
-        print(
-            "To sign up, please enter a password that is at least 10 characters in length.")
-        password = input("New password: ")
-        if len(password) < 10:
-            print("Password is too short. Please try again.")
-            password = input("New password: ")
-        user_id = random.randint(1000, 50000)
-        # check user_id is unique, otherwise run again
-        login_details = {
-            "user_email": email,
-            "user_password": password,
-            "user_id": user_id
-        }
-        with open('./src/registered_users.csv', 'a') as csv_file:
-            dict_object = csv.DictWriter(
-                csv_file, fieldnames=registered_users_rows)
-            dict_object.writerow(login_details)
-        print(f"\nWelcome! Your user ID is {user_id}\n")
+    # need to update this to check only one column and not all
+    for col in users_csv:
+        if users_csv[col].str.contains(email).any():
+            print("Welcome back!")
+            password = input("Please enter your password: ")
+            # need to add code to validate password
+            break
+        else:
+            # need to add code to validate email is in correct format
+            print(
+                "To sign up, please enter a password that is at least 10 characters in length.")
+            # setting new password:
+            password = "temp"
+            while len(password) < 10:
+                password = input("New password: ")
+                if len(password) < 10:
+                    print("Password is too short. Please try again.")
+                    continue
+                else:
+                    break
+            for col in users_csv:
+                user_id = random.randint(1000, 50000)
+                user_id = str(user_id)  # converts int to str
+                if users_csv[col].str.contains(user_id).any():  # checks that user ID is unique, generates a new number if it is not
+                    continue
+                else:
+                    break
+            login_details = {
+                "user_email": email,
+                "user_password": password,
+                "user_id": user_id
+            }
+            with open('./src/registered_users.csv', 'a') as csv_file:  # adds new user to file
+                dict_object = csv.DictWriter(
+                    csv_file, fieldnames=registered_users_rows)
+                dict_object.writerow(login_details)
+            print(f"\nWelcome! Your user ID is {user_id}\n")
+            break
+
+# main menu feature (other feature embedded within)
 
 
 def main_menu():

@@ -125,14 +125,17 @@ The following packages will be used in our application:
 - **csv:**
     - *Purpose:* to allow us to create, read and write to .csv files in our application.
     - *URL:* https://docs.python.org/3/library/csv.html#module-csv
+- **pandas:**
+    - *Purpose:* a more advanced library for searching for matches within .csv files within our application.
+    - *URL:* https://pypi.org/project/pandas/
 - **datetime:** 
     - *Purpose:* to allow us to access the date and time of the user when they are running our application. This will us to write the date of quiz attempts into the .csv files in features 4 and 5.
     - *URL:* https://docs.python.org/3/library/datetime.html#module-datetime
 - **random:**
-    - *Purpose:* x
+    - *Purpose:* to generate a random user ID for new users within a range, rather than assigning these in sequential order.
     - *URL:* https://docs.python.org/3/library/random.html#module-random
 - **venv:**
-    - *Purpose:* x
+    - *Purpose:* to allow us to run a virtual environment for...
     - *URL:* https://docs.python.org/3/library/venv.html#module-venv
 - **colored:**
     - *Purpose:* to allow us to use colours in our terminal application, making it easier for the user to operate given there is no GUI.
