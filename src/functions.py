@@ -1,5 +1,6 @@
 # import any packages required here
 
+import sys
 import csv
 import pandas
 import datetime
@@ -18,14 +19,18 @@ class User:
 # setting up file handling
 registered_users_rows = ['user_email', 'user_password', 'user_id']
 users_csv = pandas.read_csv('./src/registered_users.csv')
+users_emails = pandas.read_csv(
+    './src/registered_users.csv', usecols=['user_email'])
+users_ids = pandas.read_csv('./src/registered_users.csv', usecols=['user_id'])
+quiz_csv = pandas.read_csv('./src/quiz_questions.csv')
 
 # login/registration feature
 
 def login(User):
     email = input("Please enter your email address: ")
     # need to update this to check only one column and not all
-    for col in users_csv:
-        if users_csv[col].str.contains(email).any():
+    for row in users_emails:
+        if users_emails[row].str.contains(email).any():
             print("Welcome back!")
             password = input("Please enter your password: ")
             # need to add code to validate password
@@ -43,10 +48,11 @@ def login(User):
                     continue
                 else:
                     break
-            for col in users_csv:
+            for row in users_ids:
                 user_id = random.randint(1000, 50000)
                 user_id = str(user_id)  # converts int to str
-                if users_csv[col].str.contains(user_id).any():  # checks that user ID is unique, generates a new number if it is not
+                # checks that user ID is unique, generates a new number if it is not
+                if users_ids[row].astype(str).str.contains(user_id).any():
                     continue
                 else:
                     break
@@ -62,8 +68,24 @@ def login(User):
             print(f"\nWelcome! Your user ID is {user_id}\n")
             break
 
-# main menu feature (other feature embedded within)
+def quiz(User):
+    print("Welcome the WFDF Rules Accreditation Quiz.\nYou can exit at time by entering '\quit'\nFor each question, please answer True or False.\nYou will see your total score at the end.")
+    quiz_continue = input("Press any key to continue: ")
+    print("Quiz time!")
+    
+    # revisit this later - hurting my head!
+    
+    #for i, question in enumerate(questions):
+       #pass
 
+def previous_results(User):
+    pass
+
+def certified_players (User):
+    pass
+
+
+# main menu feature (other feature embedded within)
 
 def main_menu():
     display_menu = True
@@ -74,20 +96,32 @@ def main_menu():
         if menu_selection == "1":
             display_menu = False
             print("Option 1 selected!")
+            quiz(User)
             # add quiz feature here
+
+
+
         elif menu_selection == "2":
             display_menu = False
             print("Option 2 selected!")
+            previous_results(User)
             # add previous results feature here
+
+
+
         elif menu_selection == "3":
             display_menu = False
             print("Option 3 selected!")
+            certified_players(User)
             # add certified players feature here
+
+
+
         elif menu_selection == "4":
             display_menu = False
-            print("Option 4 selected!")
-            # add exit protocol here
+            print("Thank you, see you next time!")
+            sys.exit(0)
         else:
-            print("Invalid menu option selected! Please try again.")
-            print("Here's the menu again for you...")
+            print(
+                "Invalid menu option selected! Please try again.\nHere's the menu again for you...")
             continue
