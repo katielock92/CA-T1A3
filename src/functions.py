@@ -1,19 +1,29 @@
 # import any packages required here
-
 import sys
+import re
 import csv
 import pandas
 import datetime
 import random
 
-# establishing class for the user
-
-
+# establishing class for the user:
 class User:
     def __init__(self, email, password, user_id):
         self.email = email
         self.password = password
         self.user_id = user_id
+
+# function to check for valid email format:
+def check(email):
+    valid_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    email_valid = False
+    while not email_valid:
+        if(re.fullmatch(valid_email, email)):
+            email_valid = True
+            return
+        else:
+            print("Invalid email format, please try again.")
+            email = input("Please enter your email address: ")
 
 
 # setting up file handling
@@ -28,7 +38,6 @@ quiz_csv = pandas.read_csv('./src/quiz_questions.csv')
 
 def login(User):
     email = input("Please enter your email address: ")
-    # need to update this to check only one column and not all
     for row in users_emails:
         if users_emails[row].str.contains(email).any():
             print("Welcome back!")
@@ -36,10 +45,10 @@ def login(User):
             # need to add code to validate password
             break
         else:
-            # need to add code to validate email is in correct format
+            check(email) # checks email format is valid
             print(
                 "To sign up, please enter a password that is at least 10 characters in length.")
-            # setting new password:
+            # setting password:
             password = "temp"
             while len(password) < 10:
                 password = input("New password: ")
@@ -48,6 +57,7 @@ def login(User):
                     continue
                 else:
                     break
+
             for row in users_ids:
                 user_id = random.randint(1000, 50000)
                 user_id = str(user_id)  # converts int to str
@@ -74,12 +84,15 @@ def quiz(User):
     print("Quiz time!")
     
     # revisit this later - hurting my head!
-    
+
     #for i, question in enumerate(questions):
        #pass
 
 def previous_results(User):
-    pass
+    try:
+        pass #open and read csv file
+    except: #add except error name
+        pass #print that no previous results available
 
 def certified_players (User):
     pass
@@ -93,35 +106,36 @@ def main_menu():
         print("\nWFDF RULES OF ULTIMATE ACCREDITATION APP - MAIN MENU\n\n1: Begin the Rules Accreditation Quiz\n2: See your previous results\n3: Access the database of certified players\n4: Exit application\n")
         menu_selection = input(
             "Please select an option by entering the menu number: ")
-        if menu_selection == "1":
-            display_menu = False
-            print("Option 1 selected!")
-            quiz(User)
-            # add quiz feature here
+        try:
+            menu_selection = int(menu_selection)
+            if menu_selection == "1":
+                display_menu = False
+                print("Option 1 selected!")
+                quiz(User)
+                # add quiz feature here
 
+            elif menu_selection == "2":
+                display_menu = False
+                print("Option 2 selected!")
+                previous_results(User)
+                # add previous results feature here
 
+            elif menu_selection == "3":
+                display_menu = False
+                print("Option 3 selected!")
+                certified_players(User)
+                # add certified players feature here
 
-        elif menu_selection == "2":
-            display_menu = False
-            print("Option 2 selected!")
-            previous_results(User)
-            # add previous results feature here
+            elif menu_selection == "4":
+                display_menu = False
+                print("Thank you, see you next time!")
+                sys.exit(0)
+    
+            else:
+                print(
+                    "Invalid menu option selected! Please try again.\nHere's the menu again for you...")
+                continue
 
-
-
-        elif menu_selection == "3":
-            display_menu = False
-            print("Option 3 selected!")
-            certified_players(User)
-            # add certified players feature here
-
-
-
-        elif menu_selection == "4":
-            display_menu = False
-            print("Thank you, see you next time!")
-            sys.exit(0)
-        else:
-            print(
-                "Invalid menu option selected! Please try again.\nHere's the menu again for you...")
+        except ValueError:
+            print("That wasn't a number! Please try again.\nHere's the menu again for you...")
             continue

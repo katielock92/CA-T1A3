@@ -126,8 +126,11 @@ The following packages will be used in our application:
     - *Purpose:* to allow us to create, read and write to .csv files in our application.
     - *URL:* https://docs.python.org/3/library/csv.html#module-csv
 - **pandas:**
-    - *Purpose:* a more advanced library for searching for matches within .csv files within our application.
+    - *Purpose:* a more advanced library for searching for working with .csv files in our application.
     - *URL:* https://pypi.org/project/pandas/
+- **re:**
+    - *Purpose:* stands for "regular expressions", allows us to use special characters without invoking their meaning. Utilised for validating email address format.
+    - *URL:* https://docs.python.org/3/library/re.html
 - **datetime:** 
     - *Purpose:* to allow us to access the date and time of the user when they are running our application. This will us to write the date of quiz attempts into the .csv files in features 4 and 5.
     - *URL:* https://docs.python.org/3/library/datetime.html#module-datetime
