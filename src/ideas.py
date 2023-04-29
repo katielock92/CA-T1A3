@@ -13,3 +13,16 @@ questions = questions.sample(n=20)
         #print(questions.iloc[1])
         #user_answer = input("Answer: ")
         #n += n
+
+
+
+def check(password):
+    valid_password = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$'
+    password_valid = False
+    while not password_valid:
+        if (re.fullmatch(valid_password, password)):
+            password_valid = True
+            return
+        else:
+            print("Password does not meet required format, please try again.")
+            password = input("New password: ")
