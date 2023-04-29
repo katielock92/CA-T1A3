@@ -2,7 +2,7 @@
 import sys
 import re
 import csv
-import pandas
+import pandas as pd
 import datetime
 import random
 
@@ -29,14 +29,16 @@ def check(email):
             print("Invalid email format, please try again.")
             email = input("Please enter your email address: ")
 
+ 
 
 # setting up file handling, tidy this up later
 registered_users_rows = ['user_email', 'user_password', 'user_id']
-users_csv = pandas.read_csv('./src/registered_users.csv')
-users_emails = pandas.read_csv(
+users_csv = pd.read_csv('./src/registered_users.csv')
+users_emails = pd.read_csv(
     './src/registered_users.csv', usecols=['user_email'])
-users_ids = pandas.read_csv('./src/registered_users.csv', usecols=['user_id'])
-quiz_csv = pandas.read_csv('./src/quiz_questions.csv')
+users_ids = pd.read_csv('./src/registered_users.csv', usecols=['user_id'])
+quiz_csv = pd.read_csv('./src/quiz_questions.csv')
+
 
 def login(User):
     email = input("Please enter your email address: ")
@@ -44,23 +46,31 @@ def login(User):
         if users_emails[row].str.contains(email).any():
             print("Welcome back!")
             password = input("Please enter your password: ")
-            # need to add code to validate password against csv file
-            break
+            for index, row in users_csv.iterrows(): # validates password matches:
+                if row['user_email'] == email and row['user_password'] == password:
+                    print("Login successful!")
+                    return
+                else:
+                    print("Incorrect password, please try again.")
+                    password = input("Please enter your password: ")
+                    continue
+            
         else:
             check(email)  # checks email format is valid
             print(
                 "To sign up, please set your password.\nYour password must meet the following conditions:\n- Contains at least one lower case letter\n- Contains at least one upper case letter\n- Contains 10 or more characters")
-            
+
             valid_password = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$'
             password_valid = False
             while not password_valid:
                 password = input("New password: ")
-                if (re.fullmatch(valid_password, password)): # validates password against conditions in regex
+                # validates password against conditions in regex
+                if (re.fullmatch(valid_password, password)):
                     password_valid = True
                     continue
                 else:
                     print("Password does not meet required format, please try again.")
-            
+
             for row in users_ids:
                 user_id = random.randint(1000, 50000)
                 user_id = str(user_id)  # converts int to str
@@ -104,7 +114,6 @@ def previous_results(User):
 def certified_players(User):
     # to be completed
     pass
-
 
 
 def main_menu():
