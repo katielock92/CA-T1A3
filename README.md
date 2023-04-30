@@ -5,7 +5,11 @@
 xyz
 ___
 ## Links
-xyz
+Here are some key links relevant to this project:
+- Github repo: https://github.com/katielock92/CA-T1A3
+- Presentation: x
+- Trello board; https://trello.com/b/93Hv7cLh/t1a3-terminal-application-project-management
+- WFDF rules: https://rules.wfdf.org/
 ___
 ## Features
 My app idea and features were posted onto Discord on 22 April 2023 for educator approval:
@@ -129,10 +133,10 @@ The following packages will be used in our application:
     - *Purpose:* a more advanced library for searching for working with .csv files in our application.
     - *URL:* https://pypi.org/project/pandas/
 - **re:**
-    - *Purpose:* stands for "regular expressions", allows us to use special characters without invoking their meaning. Utilised for validating email address format.
+    - *Purpose:* stands for "regular expressions", allows us to use special characters without invoking their meaning. Utilised for validating email address and password formats.
     - *URL:* https://docs.python.org/3/library/re.html
 - **datetime:** 
-    - *Purpose:* to allow us to access the date and time of the user when they are running our application. This will us to write the date of quiz attempts into the .csv files in features 4 and 5.
+    - *Purpose:* to allow us to access the date and time of the user when they are running our application. This will us to write the date of quiz attempts into the .csv files that are then viewed in features 4 and 5.
     - *URL:* https://docs.python.org/3/library/datetime.html#module-datetime
 - **random:**
     - *Purpose:* to generate a random user ID for new users within a range, rather than assigning these in sequential order.
@@ -145,7 +149,15 @@ The following packages will be used in our application:
     - *URL:* https://pypi.org/project/colored/
 
 ### **Testing and TDD**
-Another requirement of the application is that there are **at least TWO** tests.  Ideally we should follow Test-Driven Development (TDD) and write these tests prior to coding the features, so this needs to be factored into our timeline and prioritisation.
+Another requirement of the application is that there are **at least TWO** tests.  In an ideal world, we should follow Test-Driven Development (TDD) and write these tests prior to coding the features, so this needs to be factored into our timeline and prioritisation.
+
+However when reviewing my features and what types of test cases I could run, there are not a large number of feasible test cases that could be written *before* commencing development, given the app primarily operates through user inputs and file handling rather than too many operational functions.
+
+Some initial ideas for test cases include:
+- checking that the scores calculated in the quiz are operating as expected
+- checking that new user registrations are correctly adding a new row to the registered users file
+- checking that the completion of a quiz correctly adds to the user's previous results file
+- checking that completing the quiz with a passing score correctly adds to the certified players file
 
 ### **Timeline and Prioritisation**
 Due to a combination of the features's priority, complexity and relationship with other features, I plan to prioritise the initial development of features in the following order:
@@ -168,7 +180,8 @@ ___
 xyz
 ___
 ## Code Styling Guide
-xyz
+My application utilises the Google Python Styling Guide.
+The full details of Google's styling guide is documented here: https://google.github.io/styleguide/pyguide.html
 
 ___
 ## Assignment Brief:
