@@ -104,14 +104,24 @@ def quiz(User):
     for row in questions_csv:
         quiz_dict[row[0]] = row[1:]
     questions = random.sample(list(quiz_dict.items()), k=20)
-    
-    # TODO for loop for each of the 20 questions
+    user_score = 0
+    for i, question in enumerate(questions):
+        print(f"Question {i+1}: {question[0]}")
+        user_answer = input("Your answer: ").upper()
+        # TODO get validation of answer only accepting true or false working
+        #if user_answer != "TRUE" or user_answer != "FALSE":
+            #print("Invalid answer! Please enter True or False")
+        if user_answer in question[1]:
+            user_score = user_score + 1
+    if user_score >= 17:
+        print("Congratulations! You passed the quiz.")
+        print(f"Your score was {user_score}/20")
+        # TODO have results write to csvs
+    else:
+        print(f"Your score was {user_score}/20 and a score of at least 85% is required to pass.")
+        # TODO have results write to csv and ask if they want to try again
 
-    print("Quiz time!")
     quiz_continue = input("Press any key to go back to the main menu: ")
-
-    # TODO revisit this later - hurting my head!
-
 
 def previous_results(User):
     try:

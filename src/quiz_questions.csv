@@ -71,7 +71,7 @@ It is good spirit to tell them you think it was a foul.",TRUE
 "Player A establishes possession of a pass very close to the end zone.
 A few seconds later Player A calls 'goal'.
 There is a discussion which determines Player A was in the central zone when they caught the pass, not the end zone.
-All players must return to where they were when Player A said 'goal'.,FALSE
+All players must return to where they were when Player A said 'goal'.",FALSE
 "The defence (Team A) is offside for the pull.
 The offence (Team B) calls offside while the disc is still in the air.
 The offence drops the pull.
@@ -128,7 +128,7 @@ The stall count must remain at 'Stalling 6' when play restarts.",TRUE
 "A 'Straddle' marking infraction may be called by any opposing player.",FALSE
 "A Blocking Foul occurs when a player takes a position that an opponent moving in a legal manner will be unable to avoid, taking into account the opponents expected position based on their established speed and direction, and non-minor contact results.",TRUE
 "A defender can purposefully bobble the disc to themselves for the sole purpose of moving in a specific direction.",FALSE
-"A defender is guarding an offensive player when they are within five meters of that offensive player and are reacting to that offensive player.,FALSE
+"A defender is guarding an offensive player when they are within five meters of that offensive player and are reacting to that offensive player.",FALSE
 "A force-out foul can only occur if a player is in the air when they are fouled.",FALSE
 "A pass is not 'down' if a receiver catches a pass before the disc contacts the ground, and maintains the catch while the disc is in contact with the ground.",TRUE
 "A pick can occur when a defender is obstructed by another player, and this prevents them from moving towards/with the opponent they are guarding.",TRUE
