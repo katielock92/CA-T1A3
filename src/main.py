@@ -6,9 +6,7 @@ print(
 )
 print("The official rules can be viewed here: https://rules.wfdf.org/")
 
-
-#functions.login(functions.User)
+functions.login(functions.User)
 functions.main_menu()
-
 
 print("Thank you for using the Rules Accreditation app!")

@@ -3,7 +3,7 @@ import sys
 import re
 import csv
 import pandas as pd
-import datetime
+from datetime import date, timedelta
 import random
 
 
@@ -37,7 +37,6 @@ registered_users_rows = ["user_email", "user_password", "user_id"]
 users_csv = pd.read_csv("./src/registered_users.csv")
 users_emails = pd.read_csv("./src/registered_users.csv", usecols=["user_email"])
 users_ids = pd.read_csv("./src/registered_users.csv", usecols=["user_id"])
-quiz_csv = pd.read_csv("./src/quiz_questions.csv")
 
 
 def login(User):
@@ -57,9 +56,11 @@ def login(User):
 
         else:
             check(email)  # checks email format is valid
-            print(
-                "To sign up, please set your password.\nYour password must meet the following conditions:\n- Contains at least one lower case letter\n- Contains at least one upper case letter\n- Contains 10 or more characters"
-            )
+            print("To sign up, please set your password.")
+            print("Your password must meet the following conditions:")
+            print("- Contains at least one lower case letter")
+            print("- Contains at least one upper case letter")
+            print("- Contains 10 or more characters")
 
             valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
             password_valid = False
@@ -97,31 +98,93 @@ def login(User):
 def quiz(User):
     print("Welcome the WFDF Rules Accreditation Quiz.")
     print("You can exit at time by entering '\quit'")
-    print("For each question, please answer True or False. You will see your total score at the end.")
+    print(
+        "For each question, please answer True or False. You will see your total score at the end."
+    )
     quiz_continue = input("Press any key to continue: ")
-    questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
-    quiz_dict = {}
-    for row in questions_csv:
-        quiz_dict[row[0]] = row[1:]
-    questions = random.sample(list(quiz_dict.items()), k=20)
-    user_score = 0
-    for i, question in enumerate(questions):
-        print(f"Question {i+1}: {question[0]}")
-        user_answer = input("Your answer: ").upper()
-        # TODO get validation of answer only accepting true or false working
-        #if user_answer != "TRUE" or user_answer != "FALSE":
-            #print("Invalid answer! Please enter True or False")
-        if user_answer in question[1]:
-            user_score = user_score + 1
-    if user_score >= 17:
-        print("Congratulations! You passed the quiz.")
-        print(f"Your score was {user_score}/20")
-        # TODO have results write to csvs
-    else:
-        print(f"Your score was {user_score}/20 and a score of at least 85% is required to pass.")
-        # TODO have results write to csv and ask if they want to try again
+
+    while True:
+        questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
+        quiz_dict = {}
+        for row in questions_csv:
+            quiz_dict[row[0]] = row[1:]
+        questions = random.sample(list(quiz_dict.items()), k=20)
+        user_score = 0
+        print(questions)
+        for i, question in enumerate(questions):
+            print(f"Question {i+1}: {question[0]}")
+            while True:
+                user_answer = input("Your answer: ").upper()
+                if user_answer == "TRUE" or user_answer == "FALSE":
+                    break
+                else:
+                    print("Invalid answer! Please enter True or False")
+            if user_answer in question[1]:
+                user_score = user_score + 1
+        attempt_date = date.today()
+        expiry_date = attempt_date + timedelta(days=550)
+
+        if user_score >= 17:
+            print("Congratulations! You passed the quiz.")
+            print(f"Your score was {user_score}/20")
+
+            # write results to certified players file"
+
+            try:
+                with open("./src/certified_players.csv"):
+                    pass
+                with open("./src/certified_players.csv", "a") as results:
+                    write_results = csv.writer(results)
+                    write_results.writerow(["user_id", attempt_date, expiry_date])
+                    # TODO get user_id working from login
+
+            except FileNotFoundError as e:
+                with open("./src/certified_players.csv", "a") as results:
+                    write_results = csv.writer(results)
+                    write_results.writerow(["Date", "Score", "Outcome"])
+                    write_results.writerow([attempt_date, user_score, "Pass"])
+
+            # write score to previous results file:
+            try:
+                with open("./src/previous_results.csv"):
+                    pass
+                with open("./src/previous_results.csv", "a") as results:
+                    write_results = csv.writer(results)
+                    write_results.writerow([attempt_date, user_score, "Pass"])
+
+            except FileNotFoundError as e:
+                with open("./src/previous_results.csv", "a") as results:
+                    write_results = csv.writer(results)
+                    write_results.writerow(["Date", "Score", "Outcome"])
+                    write_results.writerow([attempt_date, user_score, "Pass"])
+
+            break
+        else:
+            print(
+                f"Your score was {user_score}/20 and a score of at least 85% is required to pass."
+            )
+            # write score to previous results file:
+            try:
+                with open("./src/previous_results.csv"):
+                    pass
+                with open("./src/previous_results.csv", "a") as results:
+                    write_results = csv.writer(results)
+                    write_results.writerow([attempt_date, user_score, "Fail"])
+
+            except FileNotFoundError as e:
+                with open("./src/previous_results.csv", "a") as results:
+                    write_results = csv.writer(results)
+                    write_results.writerow(["Date", "Score", "Outcome"])
+                    write_results.writerow([attempt_date, user_score, "Fail"])
+
+            try_again = input("Would you like to try the quiz again? Y/N: ").upper()
+            if try_again == "Y":
+                continue
+            else:
+                break
 
     quiz_continue = input("Press any key to go back to the main menu: ")
+
 
 def previous_results(User):
     try:
