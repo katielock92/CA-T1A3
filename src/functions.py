@@ -6,6 +6,7 @@ import pandas as pd
 import datetime
 import random
 
+
 # establishing class for the user:
 
 
@@ -40,8 +41,8 @@ users_ids = pd.read_csv('./src/registered_users.csv', usecols=['user_id'])
 quiz_csv = pd.read_csv('./src/quiz_questions.csv')
 
 
-def login(User):
-    email = input("Please enter your email address: ")
+def login(User):    
+    email = input("To login or register, please enter your email address: ")
     for row in users_emails:
         if users_emails[row].str.contains(email).any():
             print("Welcome back!")
@@ -104,22 +105,38 @@ def quiz(User):
 
 
 def previous_results(User):
-    # to be completed
     try:
-        pass  # open and read csv file
-    except:  # add except error name
-        pass  # print that no previous results available
+        with open("./src/previous_results.csv") as f:
+            results = f.read()
+            print(results)
+
+    except FileNotFoundError as e:
+        print("No previous results available.")
+
+    return_to_menu = input("Press any key to return to the main menu: ")
+    
 
 
 def certified_players(User):
-    # to be completed
-    pass
+    try:
+        with open("./src/certified_players.csv") as f:
+            results = f.read()
+            print(results)
+
+    except FileNotFoundError as e:
+        print("No certified players on file - please contact WFDF")
+
+    return_to_menu = input("Press any key to return to the main menu: ")
 
 
 def main_menu():
     display_menu = True
     while display_menu:
-        print("\nWFDF RULES OF ULTIMATE ACCREDITATION APP - MAIN MENU\n\n1: Begin the Rules Accreditation Quiz\n2: See your previous results\n3: Access the database of certified players\n4: Exit application\n")
+        print("WFDF RULES OF ULTIMATE ACCREDITATION APP - MAIN MENU\n")
+        print("1: Begin the Rules Accreditation Quiz")
+        print("2: See your previous results")
+        print("3: Access the database of certified players")
+        print("4: Exit application\n")
         menu_selection = input(
             "Please select an option by entering the menu number: ")
         try:
@@ -130,19 +147,14 @@ def main_menu():
                 quiz(User)  # calls the quiz function
 
             elif menu_selection == 2:
-                display_menu = False
-                print("Option 2 selected!")
                 previous_results(User)  # calls the previous results function
+                
 
             elif menu_selection == 3:
-                display_menu = False
-                print("Option 3 selected!")
                 certified_players(User)  # calls the certified player function
 
             elif menu_selection == 4:
-                display_menu = False
-                print("Thank you, see you next time!")
-                sys.exit(0)
+                return
 
             else:
                 print(

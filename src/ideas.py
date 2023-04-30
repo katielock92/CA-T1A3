@@ -15,14 +15,13 @@ questions = questions.sample(n=20)
         #n += n
 
 
-
-def check(password):
-    valid_password = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$'
-    password_valid = False
-    while not password_valid:
-        if (re.fullmatch(valid_password, password)):
-            password_valid = True
-            return
-        else:
-            print("Password does not meet required format, please try again.")
-            password = input("New password: ")
+#Except error if file goes missing
+# confirming that registered users file exists before trying to run login function:
+users_file = "./src/registered_users.csv"
+try:
+    users_file_exists = open(users_file, "r")
+    users_file_exists.close()
+except FileNotFoundError as e:
+    users_file_exists = open(users_file, "w")
+    users_file_exists.write("user_email", "user_password", "user_id\n")
+    users_file_exists.close()
