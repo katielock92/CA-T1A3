@@ -1,86 +1,65 @@
-# import any packages required here:
+"""This module contains the primary feature functions for this application.
+
+This module is designed to be used in conjunction with main.py for operation of the login feature, along with all menu features of the quiz application.
+"""
+
 import sys
 import re
 import csv
-import pandas as pd
-from datetime import date, timedelta
+import datetime
 import random
+
+import pandas as pd
 import colored
 import emoji
 
 
-# TODO setting up file handling, tidy this up later
-
-users_csv = pd.read_csv("./src/registered_users.csv")
-users_emails = pd.read_csv("./src/registered_users.csv", usecols=["user_email"])
-users_ids = pd.read_csv("./src/registered_users.csv", usecols=["user_id"])
-
-# establishing class for the user:
-
-
 class User:
+    """Defines what features each unique user needs.
+
+    Attributes:
+        user_id: the unique integer User ID for this user
+    """
+
     def __init__(self, email, password, user_id):
+        """Initialises the instance for each user."""
         self.email = email
-        self.__password = password
+        self._password = password
         self.user_id = user_id
 
-def quit():
-    print("Thank you for using the Rules Accreditation app!")  
-    sys.exit()  
 
 user = User("", "", "")
 
-# function to check for valid email format:
-
-
-def check_email():
-    valid_email = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
-    email_valid = False
-    while not email_valid:
-        if re.fullmatch(valid_email, user.email):
-            email_valid = True
-            return
-        else:
-            print("Invalid email format, please try again.")
-            user.email = input("Please enter your email address: ")
-
-
-def check_password():
-    valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
-    password_valid = False
-    while not password_valid:
-        user.__password = input("New password: ")
-        # validates password against conditions in regex
-        if re.fullmatch(valid_password, user.__password):
-            password_valid = True
-            continue
-        else:
-            print("Password does not meet required format, please try again.")
-
 
 def login():
-    
-    user.email = input("To login or register, please enter your email address: ").lower()
+    user.email = input(
+        "To login or register, please enter your email address: "
+    ).lower()
     if user.email == "\quit":
         quit()
-    #TODO: this only loops for the length of rows, need to find a way to make it infinite if password is incorrect
+    # TODO: this only loops for the length of rows, need to find a way to make it infinite if password is incorrect
     for row in users_emails:
         if users_emails[row].str.contains(user.email).any():
             print("Welcome back!")
-            user.__password = input("Please enter your password: ")
-            for index, row in users_csv.iterrows():  # validates password matches:
-                if user.__password == "\quit":
+            user._password = input("Please enter your password: ")
+            for (
+                index,
+                row,
+            ) in users_csv.iterrows():  # validates password matches:
+                if user._password == "\quit":
                     quit()
                 if (
                     row["user_email"] == user.email
-                    and row["user_password"] == user.__password
+                    and row["user_password"] == user._password
                 ):
-                    user.user_id = row["user_id"] # obtains user ID from file and sets variable
+                    user.user_id = row[
+                        "user_id"
+                    ]  # obtains user ID from file and sets variable
                     print("Login successful!")
                     return
                 else:
                     print("Incorrect password, please try again.")
-                    user.__password = input("Please enter your password: ")
+                    user._password = input("Please enter your password: ")
                     continue
 
         else:
@@ -102,7 +81,7 @@ def login():
                     break
             login_details = {
                 "user_email": user.email,
-                "user_password": user.__password,
+                "user_password": user._password,
                 "user_id": user.user_id,
             }
             with open(
@@ -140,21 +119,28 @@ def quiz():
                     break
                 elif user_answer == "\QUIT":
                     print("Are you sure you want to quit? Your progress will be lost.")
-                    quit_quiz = input("Enter Y to proceed with exiting the application: ").upper()
+                    quit_quiz = input(
+                        "Enter Y to proceed with exiting the application: "
+                    ).upper()
                     if quit_quiz == "Y":
                         quit()
                     else:
+                        print(
+                            "OK, thanks for staying. Here's the question again for you..."
+                        )
+                        print(f"Question {i+1}: {question[0]}")
                         continue
                 else:
                     print("Invalid answer! Please enter True or False")
             if user_answer in question[1]:
-                user_score = user_score + 1
-        attempt_date = date.today()
-        expiry_date = attempt_date + timedelta(days=550)
+                user_score += 1
+        attempt_date = datetime.date.today()
+        expiry_date = attempt_date + datetime.timedelta(days=550)
 
         if user_score >= 17:
             print("Congratulations! You passed the quiz.")
             print(f"Your score was {user_score}/20")
+            print(f"You are now certified until {expiry_date}")
 
             # write results to certified players file"
 
@@ -168,7 +154,9 @@ def quiz():
             except FileNotFoundError as e:
                 with open("./src/certified_players.csv", "a") as results:
                     write_results = csv.writer(results)
-                    write_results.writerow(["Date", "Score", "Outcome"])
+                    write_results.writerow(
+                        ["User ID", "Certification Date", "Expiry Date"]
+                    )
                     write_results.writerow([user.user_id, attempt_date, expiry_date])
 
             # write score to previous results file:
@@ -212,9 +200,7 @@ def quiz():
             else:
                 break
 
-    prompt = input('Press any key to go back to the main menu, or "\quit" to exit: ').upper()
-    if prompt == "\QUIT":
-        quit()
+    menu_or_quit()
 
 
 def previous_results():
@@ -226,9 +212,7 @@ def previous_results():
     except FileNotFoundError as e:
         print("No previous results available.")
 
-    prompt = input('Press any key to go back to the main menu, or "\quit" to exit: ').upper()
-    if prompt == "\QUIT":
-        quit()
+    menu_or_quit()
 
 
 def certified_players():
@@ -240,6 +224,58 @@ def certified_players():
     except FileNotFoundError as e:
         print("No certified players on file - please contact WFDF")
 
-    prompt = input('Press any key to go back to the main menu, or "\quit" to exit: ').upper()
-    if prompt == "\QUIT":
+    menu_or_quit()
+
+
+"""When the user requests to quit, for usage in a variety of scenarios"""
+
+
+def quit():
+    print("Thank you for using the Rules Accreditation app!")
+    sys.exit()
+
+
+"""For use at the end of a feature when the input prompt is the same"""
+
+
+def menu_or_quit():
+    prompt = input(
+        'Press any key to go back to the main menu, or "\quit" to exit: '
+    ).lower()
+    if prompt == "\quit":
         quit()
+
+
+"""Checks that the email address of a new user is in a valid format"""
+
+
+def check_email():
+    valid_email = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
+    email_valid = False
+    while not email_valid:
+        if re.fullmatch(valid_email, user.email):
+            email_valid = True
+            return
+        else:
+            print("Invalid email format, please try again.")
+            user.email = input("Please enter your email address: ")
+
+
+"""Checks that the password a new user is in a valid format"""
+
+
+def check_password():
+    valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
+    password_valid = False
+    while not password_valid:
+        user._password = input("New password: ")
+        if re.fullmatch(valid_password, user._password):
+            password_valid = True
+            continue
+        else:
+            print("Password does not meet required format, please try again.")
+
+
+users_csv = pd.read_csv("./src/registered_users.csv")
+users_emails = pd.read_csv("./src/registered_users.csv", usecols=["user_email"])
+users_ids = pd.read_csv("./src/registered_users.csv", usecols=["user_id"])
