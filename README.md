@@ -123,15 +123,12 @@ If option 3 is selected from the main menu:
     - *if* main menu, return to start of outer loop
     - *else* an *except* error will occur, gracefully exiting the application
 ### **Packages**
-In addition to the use of variables, loops, control flow and functions (to make the above features happen), we need to utilise Python packages.  For this assessment, we need to import at least **four** Python packages and *extensively use* functions from at least one of these.
+In addition to the use of variables, loops, control flow and functions (to make the above features happen), we need to utilise Python packages.  For this assessment, we need to import at least **four** Python packages outside of the default Python packages, and *extensively use* functions from at least one of these.
 
-The following packages will be used in our application:
+The following default Python packages will be used in our application:
 - **csv:**
     - *Purpose:* to allow us to create, read and write to .csv files in our application.
     - *URL:* https://docs.python.org/3/library/csv.html#module-csv
-- **pandas:**
-    - *Purpose:* a more advanced library for searching for working with .csv files in our application.
-    - *URL:* https://pypi.org/project/pandas/
 - **re:**
     - *Purpose:* stands for "regular expressions", allows us to use special characters without invoking their meaning. Utilised for validating email address and password formats.
     - *URL:* https://docs.python.org/3/library/re.html
@@ -144,9 +141,20 @@ The following packages will be used in our application:
 - **venv:**
     - *Purpose:* to allow us to run a virtual environment for...
     - *URL:* https://docs.python.org/3/library/venv.html#module-venv
+
+The following **non-default** packages will be used in our application:
+- **pandas:**
+    - *Purpose:* a more advanced library for searching for working with .csv files in our application.
+    - *URL:* https://pypi.org/project/pandas/
 - **colored:**
     - *Purpose:* to allow us to use colours in our terminal application, making it easier for the user to operate given there is no GUI.
     - *URL:* https://pypi.org/project/colored/
+- **emoji:**
+    - *Purpose:* to allow for the use of emojis in our terminal application, for some added personality and visual elements.
+    - *URL:* https://pypi.org/project/emoji/
+- **ONE MORE HERE**
+    - *Purpose:* xyz
+    - *URL:* TBC
 
 ### **Testing and TDD**
 Another requirement of the application is that there are **at least TWO** tests.  In an ideal world, we should follow Test-Driven Development (TDD) and write these tests prior to coding the features, so this needs to be factored into our timeline and prioritisation.

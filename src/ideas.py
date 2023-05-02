@@ -8,3 +8,4 @@ except FileNotFoundError as e:
     users_file_exists = open(users_file, "w")
     users_file_exists.write("user_email", "user_password", "user_id\n")
     users_file_exists.close()
+
