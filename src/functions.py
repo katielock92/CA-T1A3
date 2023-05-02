@@ -1,4 +1,5 @@
 # import any packages required here:
+import sys
 import re
 import csv
 import pandas as pd
@@ -23,6 +24,9 @@ class User:
         self.__password = password
         self.user_id = user_id
 
+def quit():
+    print("Thank you for using the Rules Accreditation app!")  
+    sys.exit()  
 
 user = User("", "", "")
 
@@ -55,12 +59,18 @@ def check_password():
 
 
 def login():
-    user.email = input("To login or register, please enter your email address: ")
+    
+    user.email = input("To login or register, please enter your email address: ").lower()
+    if user.email == "\quit":
+        quit()
+    #TODO: this only loops for the length of rows, need to find a way to make it infinite if password is incorrect
     for row in users_emails:
         if users_emails[row].str.contains(user.email).any():
             print("Welcome back!")
             user.__password = input("Please enter your password: ")
             for index, row in users_csv.iterrows():  # validates password matches:
+                if user.__password == "\quit":
+                    quit()
                 if (
                     row["user_email"] == user.email
                     and row["user_password"] == user.__password
@@ -111,7 +121,9 @@ def quiz():
     print(
         "For each question, please answer True or False. You will see your total score at the end."
     )
-    continue_prompt = input("Press any key to continue: ")
+    prompt = input("Press any key to continue: ").upper()
+    if prompt == "\QUIT":
+        quit()
 
     while True:
         questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
@@ -126,6 +138,13 @@ def quiz():
                 user_answer = input("Your answer: ").upper()
                 if user_answer == "TRUE" or user_answer == "FALSE":
                     break
+                elif user_answer == "\QUIT":
+                    print("Are you sure you want to quit? Your progress will be lost.")
+                    quit_quiz = input("Enter Y to proceed with exiting the application: ").upper()
+                    if quit_quiz == "Y":
+                        quit()
+                    else:
+                        continue
                 else:
                     print("Invalid answer! Please enter True or False")
             if user_answer in question[1]:
@@ -145,7 +164,6 @@ def quiz():
                 with open("./src/certified_players.csv", "a") as results:
                     write_results = csv.writer(results)
                     write_results.writerow([user.user_id, attempt_date, expiry_date])
-                    # TODO get user_id working from login
 
             except FileNotFoundError as e:
                 with open("./src/certified_players.csv", "a") as results:
@@ -194,7 +212,9 @@ def quiz():
             else:
                 break
 
-    return_prompt = input("Press any key to go back to the main menu: ")
+    prompt = input('Press any key to go back to the main menu, or "\quit" to exit: ').upper()
+    if prompt == "\QUIT":
+        quit()
 
 
 def previous_results():
@@ -206,7 +226,9 @@ def previous_results():
     except FileNotFoundError as e:
         print("No previous results available.")
 
-    return_prompt = input("Press any key to return to the main menu: ")
+    prompt = input('Press any key to go back to the main menu, or "\quit" to exit: ').upper()
+    if prompt == "\QUIT":
+        quit()
 
 
 def certified_players():
@@ -218,4 +240,6 @@ def certified_players():
     except FileNotFoundError as e:
         print("No certified players on file - please contact WFDF")
 
-    return_prompt = input("Press any key to return to the main menu: ")
+    prompt = input('Press any key to go back to the main menu, or "\quit" to exit: ').upper()
+    if prompt == "\QUIT":
+        quit()
