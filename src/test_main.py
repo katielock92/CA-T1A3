@@ -7,6 +7,8 @@ import pytest
 test_file_name = "tests/test_users.csv"
 
 
+#TODO create class and fixture for tests
+
 def test_new_user():
     original_length = 0
     with open(test_file_name) as f:

@@ -162,10 +162,14 @@ Another requirement of the application is that there are **at least TWO** tests.
 However when reviewing my features and what types of test cases I could run, there are not a large number of feasible test cases that could be written *before* commencing development, given the app primarily operates through user inputs and file handling rather than too many operational functions.
 
 Some initial ideas for test cases include:
-- checking that the scores calculated in the quiz are operating as expected
-- checking that new user registrations are correctly adding a new row to the registered users file
-- checking that the completion of a quiz correctly adds to the user's previous results file
-- checking that completing the quiz with a passing score correctly adds to the certified players file
+1. checking that the scores calculated in the quiz are operating as expected
+2. checking that new user registrations are correctly adding a new row to the registered users file
+3. checking that the completion of a quiz correctly adds to the user's previous results file
+4. checking that completing the quiz with a passing score correctly adds to the certified players file
+
+My first test case written was for idea 2, and was written once the core features had been coded and were operating without error, but prior to refactoring.
+
+
 
 ### **Timeline and Prioritisation**
 Due to a combination of the features's priority, complexity and relationship with other features, I plan to prioritise the initial development of features in the following order:

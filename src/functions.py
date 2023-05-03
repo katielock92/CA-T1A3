@@ -13,6 +13,8 @@ import pandas as pd
 import colored
 import emoji
 
+import styles
+
 
 class User:
     """Defines what features each unique user needs.
@@ -33,7 +35,7 @@ user = User("", "", "")
 
 def login():
     user.email = input(
-        "To login or register, please enter your email address: "
+        colored.stylize("To login or register, please enter your email address: ", styles.bold)
     ).lower()
     if user.email == "\quit":
         quit()
@@ -190,19 +192,18 @@ def quit():
 
 
 def menu_or_quit():
-    prompt = input(
-        'Press any key to go back to the main menu, or "\quit" to exit: '
+    prompt = input(colored.stylize(
+        'Press any key to go back to the main menu, or "\quit" to exit: ', styles.bold)
     ).lower()
     if prompt == "\quit":
         quit()
 
 
-"""Checks that the email address of a new user is in a valid format"""
 
 
 def return_login():
-    print("Welcome back!")
-    user._password = input("Please enter your password: ")
+    print(colored.stylize("\nWelcome back!\n", styles.blue_bold))
+    user._password = input(colored.stylize("Please enter your password: ", styles.bold))
     while True:
         for index, row in users_csv.iterrows():
             if user._password == "\quit":
@@ -214,13 +215,14 @@ def return_login():
                 user.user_id = row[
                     "user_id"
                 ]
-                print("Login successful!")
+                print(colored.stylize("\nLogin successful!\n", styles.blue_bold))
                 return
             else:
-                print("Incorrect password, please try again.")
-                user._password = input("Please enter your password: ")
+                print(colored.stylize("\nIncorrect password, please try again.\n", styles.red_bold))
+                user._password = input(colored.stylize("Please enter your password: ", styles.bold))
                 continue
 
+"""Checks that the email address of a new user is in a valid format"""
 
 def check_email():
     valid_email = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
@@ -230,8 +232,8 @@ def check_email():
             email_valid = True
             return
         else:
-            print("Invalid email format, please try again.")
-            user.email = input("Please enter your email address: ")
+            print(colored.stylize("\nInvalid email format, please try again.\n", styles.red_bold))
+            user.email = input(colored.stylize("\nPlease enter your email address: ", styles.bold))
 
 
 """Checks that the password a new user is in a valid format"""
@@ -241,12 +243,12 @@ def check_password():
     valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
     password_valid = False
     while not password_valid:
-        user._password = input("New password: ")
+        user._password = input(colored.stylize("New password: ", styles.bold))
         if re.fullmatch(valid_password, user._password):
             password_valid = True
             continue
         else:
-            print("Password does not meet required format, please try again.")
+            print(colored.stylize("Password does not meet required format, please try again.", styles.red_bold))
 
 
 def new_user(users_csv):
@@ -270,6 +272,6 @@ def new_user(users_csv):
         print(f"\nWelcome! Your user ID is {user.user_id}\n")
 
 
-users_csv = pd.read_csv("registered_users.csv")
-users_emails = pd.read_csv("registered_users.csv", usecols=["user_email"])
-users_ids = pd.read_csv("registered_users.csv", usecols=["user_id"])
+users_csv = pd.read_csv("./src/registered_users.csv")
+users_emails = pd.read_csv("./src/registered_users.csv", usecols=["user_email"])
+users_ids = pd.read_csv("./src/registered_users.csv", usecols=["user_id"])
