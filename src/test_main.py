@@ -7,14 +7,14 @@ import pytest
 test_file_name = "tests/test_users.csv"
 
 
-def test_new_user(monkeypatch):
+def test_new_user():
     original_length = 0
     with open(test_file_name) as f:
         reader = csv.reader(f)
         original_length = sum(1 for row in reader)
-    inputs = iter(["test@katieelsomlock.com", "Password1234", "12345"])
-    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
-    functions.new_user()
+    functions.user.email = "test@katieelsomlock.com"
+    functions.user._password = "Password1234"
+    functions.new_user(test_file_name)
     with open(test_file_name) as f:
         reader = csv.reader(f)
         new_length = sum(1 for row in reader)

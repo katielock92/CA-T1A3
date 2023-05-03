@@ -249,7 +249,7 @@ def check_password():
             print("Password does not meet required format, please try again.")
 
 
-def new_user():
+def new_user(users_csv):
     for row in users_ids:
         user.user_id = random.randint(1000, 50000)
         user.user_id = str(user.user_id)
@@ -263,7 +263,7 @@ def new_user():
         "user_password": user._password,
         "user_id": user.user_id,
     }
-    with open("registered_users.csv", "a") as csv_file:
+    with open(users_csv, "a") as csv_file:
         registered_users_rows = ["user_email", "user_password", "user_id"]
         dict_object = csv.DictWriter(csv_file, fieldnames=registered_users_rows)
         dict_object.writerow(login_details)
