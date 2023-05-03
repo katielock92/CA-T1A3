@@ -37,61 +37,18 @@ def login():
     ).lower()
     if user.email == "\quit":
         quit()
-    # TODO: this only loops for the length of rows, need to find a way to make it infinite if password is incorrect
     for row in users_emails:
         if users_emails[row].str.contains(user.email).any():
-            print("Welcome back!")
-            user._password = input("Please enter your password: ")
-            for (
-                index,
-                row,
-            ) in users_csv.iterrows():  # validates password matches:
-                if user._password == "\quit":
-                    quit()
-                if (
-                    row["user_email"] == user.email
-                    and row["user_password"] == user._password
-                ):
-                    user.user_id = row[
-                        "user_id"
-                    ]  # obtains user ID from file and sets variable
-                    print("Login successful!")
-                    return
-                else:
-                    print("Incorrect password, please try again.")
-                    user._password = input("Please enter your password: ")
-                    continue
-
+            return_login()
         else:
-            check_email()  # checks email format is valid
+            check_email()
             print("To sign up, please set your password.")
             print("Your password must meet the following conditions:")
             print("- Contains at least one lower case letter")
             print("- Contains at least one upper case letter")
             print("- Contains 10 or more characters")
-            check_password()  # asks user to set new password, checks is valid
-
-            for row in users_ids:
-                user.user_id = random.randint(1000, 50000)
-                user.user_id = str(user.user_id)  # converts int to str
-                # checks that user ID is unique, generates a new number if it is not:
-                if users_ids[row].astype(str).str.contains(user.user_id).any():
-                    continue
-                else:
-                    break
-            login_details = {
-                "user_email": user.email,
-                "user_password": user._password,
-                "user_id": user.user_id,
-            }
-            with open(
-                "./src/registered_users.csv", "a"
-            ) as csv_file:  # adds new user to file
-                registered_users_rows = ["user_email", "user_password", "user_id"]
-                dict_object = csv.DictWriter(csv_file, fieldnames=registered_users_rows)
-                dict_object.writerow(login_details)
-            print(f"\nWelcome! Your user ID is {user.user_id}\n")
-            break
+            check_password()
+            new_user()
 
 
 def quiz():
@@ -103,7 +60,6 @@ def quiz():
     prompt = input("Press any key to continue: ").upper()
     if prompt == "\QUIT":
         quit()
-
     while True:
         questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
         quiz_dict = {}
@@ -142,8 +98,6 @@ def quiz():
             print(f"Your score was {user_score}/20")
             print(f"You are now certified until {expiry_date}")
 
-            # write results to certified players file"
-
             try:
                 with open("./src/certified_players.csv"):
                     pass
@@ -159,7 +113,6 @@ def quiz():
                     )
                     write_results.writerow([user.user_id, attempt_date, expiry_date])
 
-            # write score to previous results file:
             try:
                 with open("./src/previous_results.csv"):
                     pass
@@ -173,12 +126,10 @@ def quiz():
                     write_results.writerow(["Date", "Score", "Outcome"])
                     write_results.writerow([attempt_date, user_score, "Pass"])
 
-            break
         else:
             print(
                 f"Your score was {user_score}/20 and a score of at least 85% is required to pass."
             )
-            # write score to previous results file:
             try:
                 with open("./src/previous_results.csv"):
                     pass
@@ -192,15 +143,15 @@ def quiz():
                     write_results.writerow(["Date", "Score", "Outcome"])
                     write_results.writerow([attempt_date, user_score, "Fail"])
 
-            try_again = input(
-                "Would you like to try the quiz again? Enter Y for Yes: "
-            ).upper()
-            if try_again == "Y":
-                continue
-            else:
-                break
+                    try_again = input(
+                        "Would you like to try the quiz again? Enter Y for Yes: "
+                    ).upper()
+                    if try_again == "Y":
+                        continue
+                    else:
+                        break
 
-    menu_or_quit()
+        menu_or_quit()
 
 
 def previous_results():
@@ -249,6 +200,28 @@ def menu_or_quit():
 """Checks that the email address of a new user is in a valid format"""
 
 
+def return_login():
+    print("Welcome back!")
+    user._password = input("Please enter your password: ")
+    while True:
+        for index, row in users_csv.iterrows():  # validates password matches:
+            if user._password == "\quit":
+                quit()
+            if (
+                row["user_email"] == user.email
+                and row["user_password"] == user._password
+            ):
+                user.user_id = row[
+                    "user_id"
+                ]  # obtains user ID from file and sets variable
+                print("Login successful!")
+                return
+            else:
+                print("Incorrect password, please try again.")
+                user._password = input("Please enter your password: ")
+                continue
+
+
 def check_email():
     valid_email = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
     email_valid = False
@@ -274,6 +247,28 @@ def check_password():
             continue
         else:
             print("Password does not meet required format, please try again.")
+
+
+def new_user():
+    for row in users_ids:
+        user.user_id = random.randint(1000, 50000)
+        user.user_id = str(user.user_id)  # converts int to str
+        # checks that user ID is unique, generates a new number if it is not:
+        if users_ids[row].astype(str).str.contains(user.user_id).any():
+            continue
+        else:
+            break
+
+    login_details = {
+        "user_email": user.email,
+        "user_password": user._password,
+        "user_id": user.user_id,
+    }
+    with open("./src/registered_users.csv", "a") as csv_file:  # adds new user to file
+        registered_users_rows = ["user_email", "user_password", "user_id"]
+        dict_object = csv.DictWriter(csv_file, fieldnames=registered_users_rows)
+        dict_object.writerow(login_details)
+        print(f"\nWelcome! Your user ID is {user.user_id}\n")
 
 
 users_csv = pd.read_csv("./src/registered_users.csv")

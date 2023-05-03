@@ -152,7 +152,7 @@ The following **non-default** packages will be used in our application:
 - **emoji:**
     - *Purpose:* to allow for the use of emojis in our terminal application, for some added personality and visual elements.
     - *URL:* https://pypi.org/project/emoji/
-- **ONE MORE HERE**
+- **pytest**
     - *Purpose:* xyz
     - *URL:* TBC
 
@@ -185,11 +185,28 @@ xyz
 
 ___
 ## Sources
-xyz
+1. https://google.github.io/styleguide/pyguide.html
+2. 
+3. 
 ___
 ## Code Styling Guide
 My application utilises the Google Python Styling Guide.
 The full details of Google's styling guide is documented here: https://google.github.io/styleguide/pyguide.html
+
+Some of the key elements of this styling guide that I implemented with my code are:
+- start all module files with a docstring describing the content and usage of the module
+- use import statements for packages and modules only, not for individual classes or functions
+- import statements to sit at the top of the file, and grouped by most generic to least generic
+- maximum line length of 80 characters (with some exceptions)
+- indent code blocks with 4 spaces, not tabs
+- use a docstring above all function that are have non-obvious logic
+- use a docstring for all classes
+- use f-strings for formatting strings
+- explicitly close all files
+- one statement per line
+- naming conventions
+- keep functions short and focused
+- overall, be consistent!
 
 ___
 ## Assignment Brief:
