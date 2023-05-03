@@ -204,7 +204,7 @@ def return_login():
     print("Welcome back!")
     user._password = input("Please enter your password: ")
     while True:
-        for index, row in users_csv.iterrows():  # validates password matches:
+        for index, row in users_csv.iterrows():
             if user._password == "\quit":
                 quit()
             if (
@@ -213,7 +213,7 @@ def return_login():
             ):
                 user.user_id = row[
                     "user_id"
-                ]  # obtains user ID from file and sets variable
+                ]
                 print("Login successful!")
                 return
             else:
@@ -252,8 +252,7 @@ def check_password():
 def new_user():
     for row in users_ids:
         user.user_id = random.randint(1000, 50000)
-        user.user_id = str(user.user_id)  # converts int to str
-        # checks that user ID is unique, generates a new number if it is not:
+        user.user_id = str(user.user_id)
         if users_ids[row].astype(str).str.contains(user.user_id).any():
             continue
         else:
@@ -264,13 +263,13 @@ def new_user():
         "user_password": user._password,
         "user_id": user.user_id,
     }
-    with open("./src/registered_users.csv", "a") as csv_file:  # adds new user to file
+    with open("registered_users.csv", "a") as csv_file:
         registered_users_rows = ["user_email", "user_password", "user_id"]
         dict_object = csv.DictWriter(csv_file, fieldnames=registered_users_rows)
         dict_object.writerow(login_details)
         print(f"\nWelcome! Your user ID is {user.user_id}\n")
 
 
-users_csv = pd.read_csv("./src/registered_users.csv")
-users_emails = pd.read_csv("./src/registered_users.csv", usecols=["user_email"])
-users_ids = pd.read_csv("./src/registered_users.csv", usecols=["user_id"])
+users_csv = pd.read_csv("registered_users.csv")
+users_emails = pd.read_csv("registered_users.csv", usecols=["user_email"])
+users_ids = pd.read_csv("registered_users.csv", usecols=["user_id"])
