@@ -54,12 +54,12 @@ def login():
 
 
 def quiz():
-    print("Welcome the WFDF Rules Accreditation Quiz.")
-    print("You can exit at time by entering '\quit'")
+    print(colored.stylize("\nWelcome the WFDF Rules Accreditation Quiz.\n", styles.red_bold))
+    print("You can exit at any time by entering '\quit'\n")
     print(
-        "For each question, please answer True or False. You will see your total score at the end."
+        "For each question, please answer True or False. You will see your total score at the end.\n"
     )
-    prompt = input("Press any key to continue: ").upper()
+    prompt = input(colored.stylize("Press any key to continue: ", styles.bold)).upper()
     if prompt == "\QUIT":
         quit()
     while True:
@@ -70,26 +70,28 @@ def quiz():
         questions = random.sample(list(quiz_dict.items()), k=20)
         user_score = 0
         for i, question in enumerate(questions):
-            print(f"Question {i+1}: {question[0]}")
+            print(colored.stylize(f"\nQuestion {i+1}:", styles.blue_bold))
+            print(colored.stylize(f"{question[0]}\n", styles.blue))
             while True:
-                user_answer = input("Your answer: ").upper()
+                user_answer = input(colored.stylize("Your answer: ", styles.bold)).upper()
                 if user_answer == "TRUE" or user_answer == "FALSE":
                     break
                 elif user_answer == "\QUIT":
-                    print("Are you sure you want to quit? Your progress will be lost.")
-                    quit_quiz = input(
-                        "Enter Y to proceed with exiting the application: "
+                    print(colored.stylize("\nAre you sure you want to quit? Your progress will be lost.", styles.red_bold))
+                    quit_quiz = input(colored.stylize(
+                        "Enter Y to proceed with exiting the application: ", styles.bold)
                     ).upper()
                     if quit_quiz == "Y":
                         quit()
                     else:
                         print(
-                            "OK, thanks for staying. Here's the question again for you..."
+                            "\nOK, thanks for staying. Here's the question again for you..."
                         )
-                        print(f"Question {i+1}: {question[0]}")
+                        print(colored.stylize(f"\nQuestion {i+1}:", styles.blue_bold))
+                        print(colored.stylize(f"{question[0]}\n", styles.blue))
                         continue
                 else:
-                    print("Invalid answer! Please enter True or False")
+                    print(colored.stylize("\nInvalid answer! Please enter True or False...\n", styles.red_bold))
             if user_answer in question[1]:
                 user_score += 1
         attempt_date = datetime.date.today()
