@@ -9,3 +9,9 @@ except FileNotFoundError as e:
     users_file_exists.write("user_email", "user_password", "user_id\n")
     users_file_exists.close()
 
+
+# test idea
+def test_menu_selection(monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: next("option"))
+    with pytest.raises(ValueError):
+        main.menu_decision()

@@ -13,6 +13,7 @@ import time
 import pandas as pd
 import colored
 import emoji
+import maskpass
 
 import styles
 
@@ -24,98 +25,146 @@ class User:
         user_id: the unique integer User ID for this user
     """
 
-    def __init__(self, email, password, user_id):
+    def __init__(self, email, password, user_id, user_score):
         """Initialises the instance for each user."""
         self.email = email
         self._password = password
         self.user_id = user_id
+        self.user_score = user_score
 
 
-user = User("", "", "")
-
-
-def welcome():
-    print(colored.stylize("\nWelcome to the", styles.blue_bold))
-    print(emoji.emojize(colored.stylize("WFDF Rules of Ultimate :flying_disc:", styles.red_bold)))
-    print(colored.stylize("Accreditation Quiz App!\n", styles.blue_bold))
-    time.sleep(1)
-    print("You can use this app to test your knowledge of the rules of Ultimate and become a certified player.\n"
-    )
-    time.sleep(2)
-    rules_link = colored.stylize("https://rules.wfdf.org/", styles.blue_bold)
-    print(f"The official rules can be viewed here: {rules_link}\n")
-    time.sleep(2)
-    print("Documentation for this app can be found here: x")
-    print(colored.stylize("\n______________________________________________________________\n\n", styles.blue_bold))
-    time.sleep(2)
+user = User("", "", "", "")
 
 
 def login():
     user.email = input(
-        colored.stylize("To login or register, please enter your email address: ", styles.bold)
+        colored.stylize(
+            "To login or register, please enter your email address: ", styles.bold
+        )
     ).lower()
+    check_email()
     if user.email == "\quit":
         quit()
-    for row in users_emails:
-        if users_emails[row].str.contains(user.email).any():
-            return_login()
-        else:
-            check_email()
-            print("To sign up, please set your password.")
-            print("Your password must meet the following conditions:")
-            print("- Contains at least one lower case letter")
-            print("- Contains at least one upper case letter")
-            print("- Contains 10 or more characters")
-            check_password()
-            new_user()
-    time.sleep(2)
-
-
-def main_menu():
-    print(colored.stylize("\nWFDF RULES OF ULTIMATE ACCREDITATION APP - MAIN MENU\n", styles.red_bold))
-    print(colored.stylize("1: Begin the Rules Accreditation Quiz", styles.blue))
-    print(colored.stylize("2: See your previous results", styles.blue))
-    print(colored.stylize("3: Access the database of certified players", styles.blue))
-    print(colored.stylize("4: Exit application\n", styles.blue))
-    menu_selection = input(colored.stylize("Please select an option by entering the menu number: ", styles.bold))
-    return menu_selection
-
-def menu_decision():
-    user_decision = ""
-    while user_decision != 4:
-        user_decision = main_menu()
+    while True:
         try:
-            user_decision = int(user_decision)
-            if user_decision == 1:
-                quiz()
-
-            elif user_decision == 2:
-                previous_results()
-
-            elif user_decision == 3:
-                certified_players()
-
-            elif user_decision == 4:
-                pass
-
-            else:
-                print(colored.stylize(
-                    "\nInvalid menu option selected! Please try again.\nHere's the menu again for you...\n", styles.red_bold)
-                )
-                time.sleep(1)
+            with open("./src/registered_users.csv", "r") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row["user_email"] == user.email:
+                        return_login()
+                    else:
+                        print("\nTo sign up, please set your password.")
+                        print("Your password must meet the following conditions:")
+                        print("- Contains at least one lower case letter")
+                        print("- Contains at least one upper case letter")
+                        print("- Contains 10 or more characters\n")
+                        check_password()
+                        new_user()
+                    time.sleep(2)
+                    return
+        except FileNotFoundError:
+            with open("./src/registered_users.csv", "a") as f:
+                new_file = csv.writer(f)
+                new_file.writerow(["user_email", "user_password", "user_id"])
                 continue
 
-        except ValueError:
-            print(colored.stylize(
-                "\nThat wasn't a number! Please try again.\nHere's the menu again for you...\n", styles.red_bold)
+
+def return_login():
+    """For validating existing registered users"""
+    print(colored.stylize("\nWelcome back!\n", styles.blue_bold))
+    user._password = maskpass.askpass(prompt="Please enter your password: ", mask="#")
+    while True:
+        for index, row in pd.read_csv("./src/registered_users.csv").iterrows():
+            if user._password == "\quit":
+                quit()
+            if (
+                row["user_email"] == user.email
+                and row["user_password"] == user._password
+            ):
+                user.user_id = row["user_id"]
+                print(colored.stylize("\nLogin successful!\n", styles.blue_bold))
+                return
+            else:
+                print(
+                    colored.stylize(
+                        "\nIncorrect password, please try again.\n", styles.red_bold
+                    )
+                )
+                user._password = maskpass.askpass(
+                    prompt="Please enter your password: ", mask="#"
+                )
+                continue
+
+
+def check_email():
+    """Checks that the email address is in a valid format"""
+    valid_email = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
+    while True:
+        if re.fullmatch(valid_email, user.email):
+            return
+        else:
+            print(
+                colored.stylize(
+                    "\nInvalid email format, please try again.\n", styles.red_bold
+                )
             )
-            time.sleep(1)
+            user.email = input(
+                colored.stylize("Please enter your email address: ", styles.bold)
+            )
             continue
-    print(colored.stylize("\nThank you for using the Rules Accreditation app!\n", styles.blue_bold))
+
+
+def check_password():
+    """Checks that the password a new user is in a valid format"""
+    valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
+    while True:
+        user._password = maskpass.askpass(prompt="New password: ", mask="#")
+        if re.fullmatch(valid_password, user._password):
+            return
+        else:
+            print(
+                colored.stylize(
+                    "\nPassword does not meet required format, please try again.\n",
+                    styles.red_bold,
+                )
+            )
+            continue
+
+
+def new_user():
+    """Saving the successful registration of a new user"""
+    with open("./src/registered_users.csv", "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            user.user_id = random.randint(1000, 50000)
+            user.user_id = str(user.user_id)
+            if row["user_id"] == user.user_id:
+                continue
+            else:
+                break
+
+    login_details = {
+        "user_email": user.email,
+        "user_password": user._password,
+        "user_id": user.user_id,
+    }
+    with open("./src/registered_users.csv", "a") as f:
+        registered_users_rows = ["user_email", "user_password", "user_id"]
+        writer = csv.DictWriter(f, fieldnames=registered_users_rows)
+        writer.writerow(login_details)
+        print(f"\nWelcome! Your user ID is {user.user_id}\n")
 
 
 def quiz():
-    print(emoji.emojize(colored.stylize("\n\nWelcome the WFDF Rules Accreditation Quiz :flying_disc:\n", styles.red_bold)))
+    """Outer loop for the quiz feature"""
+    print(
+        emoji.emojize(
+            colored.stylize(
+                "\n\nWelcome the WFDF Rules Accreditation Quiz :flying_disc:\n",
+                styles.red_bold,
+            )
+        )
+    )
     time.sleep(1)
     print("You can exit at any time by entering '\quit'\n")
     time.sleep(1)
@@ -127,99 +176,131 @@ def quiz():
     if prompt == "\QUIT":
         quit()
     while True:
-        questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
-        quiz_dict = {}
-        for row in questions_csv:
-            quiz_dict[row[0]] = row[1:]
-        questions = random.sample(list(quiz_dict.items()), k=20)
-        user_score = 0
-        for i, question in enumerate(questions):
-            print(colored.stylize(f"\nQuestion {i+1}:", styles.blue_bold))
-            print(colored.stylize(f"{question[0]}\n", styles.blue))
-            while True:
-                user_answer = input(colored.stylize("Your answer: ", styles.bold)).upper()
-                if user_answer == "TRUE" or user_answer == "FALSE":
-                    break
-                elif user_answer == "\QUIT":
-                    print(colored.stylize("\nAre you sure you want to quit? Your progress will be lost.", styles.red_bold))
-                    quit_quiz = input(colored.stylize(
-                        "Enter Y to proceed with exiting the application: ", styles.bold)
-                    ).upper()
-                    if quit_quiz == "Y":
-                        quit()
-                    else:
-                        print(
-                            "\nOK, thanks for staying. Here's the question again for you..."
-                        )
-                        print(colored.stylize(f"\nQuestion {i+1}:", styles.blue_bold))
-                        print(colored.stylize(f"{question[0]}\n", styles.blue))
-                        continue
-                else:
-                    print(colored.stylize("\nInvalid answer! Please enter True or False...\n", styles.red_bold))
-            if user_answer in question[1]:
-                user_score += 1
-        attempt_date = datetime.date.today()
-        expiry_date = attempt_date + datetime.timedelta(days=550)
-
-        if user_score >= 17:
-            print("Congratulations! You passed the quiz.")
-            print(f"Your score was {user_score}/20")
-            print(f"You are now certified until {expiry_date}")
-
-            try:
-                with open("./src/certified_players.csv"):
-                    pass
-                with open("./src/certified_players.csv", "a") as results:
-                    write_results = csv.writer(results)
-                    write_results.writerow([user.user_id, attempt_date, expiry_date])
-
-            except FileNotFoundError as e:
-                with open("./src/certified_players.csv", "a") as results:
-                    write_results = csv.writer(results)
-                    write_results.writerow(
-                        ["User ID", "Certification Date", "Expiry Date"]
-                    )
-                    write_results.writerow([user.user_id, attempt_date, expiry_date])
-
-            try:
-                with open("./src/previous_results.csv"):
-                    pass
-                with open("./src/previous_results.csv", "a") as results:
-                    write_results = csv.writer(results)
-                    write_results.writerow([attempt_date, user_score, "Pass"])
-
-            except FileNotFoundError as e:
-                with open("./src/previous_results.csv", "a") as results:
-                    write_results = csv.writer(results)
-                    write_results.writerow(["Date", "Score", "Outcome"])
-                    write_results.writerow([attempt_date, user_score, "Pass"])
+        new_quiz()
+        if user.user_score >= 17:
+            pass_quiz()
+            print(colored.stylize("\nReturning the main menu...\n", styles.blue_bold))
+            time.sleep(1.5)
+            break
 
         else:
-            print(
-                f"Your score was {user_score}/20 and a score of at least 85% is required to pass."
-            )
-            try:
-                with open("./src/previous_results.csv"):
-                    pass
-                with open("./src/previous_results.csv", "a") as results:
-                    write_results = csv.writer(results)
-                    write_results.writerow([attempt_date, user_score, "Fail"])
+            fail_quiz()
+            try_again = input(
+                "Would you like to try the quiz again? Enter Y for Yes: "
+            ).upper()
+            if try_again == "Y":
+                continue
+            else:
+                print(
+                    colored.stylize("\nReturning the main menu...\n", styles.blue_bold)
+                )
+                time.sleep(1.5)
+                return
 
-            except FileNotFoundError as e:
-                with open("./src/previous_results.csv", "a") as results:
-                    write_results = csv.writer(results)
-                    write_results.writerow(["Date", "Score", "Outcome"])
-                    write_results.writerow([attempt_date, user_score, "Fail"])
+    menu_or_quit()
 
-                    try_again = input(
-                        "Would you like to try the quiz again? Enter Y for Yes: "
-                    ).upper()
-                    if try_again == "Y":
-                        continue
-                    else:
-                        break
 
-        menu_or_quit()
+def new_quiz():
+    """Inner loop for each unique quiz instance"""
+    questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
+    quiz_dict = {}
+    for row in questions_csv:
+        quiz_dict[row[0]] = row[1:]
+    questions = random.sample(list(quiz_dict.items()), k=20)
+    user.user_score = 0
+    for i, question in enumerate(questions):
+        print(colored.stylize(f"\nQuestion {i+1}:", styles.blue_bold))
+        print(colored.stylize(f"{question[0]}\n", styles.blue))
+        while True:
+            user_answer = input(colored.stylize("Your answer: ", styles.bold)).upper()
+            if user_answer == "TRUE" or user_answer == "FALSE":
+                break
+            elif user_answer == "\QUIT":
+                print(
+                    colored.stylize(
+                        "\nAre you sure you want to quit? Your progress will be lost.",
+                        styles.red_bold,
+                    )
+                )
+                quit_quiz = input(
+                    colored.stylize(
+                        "Enter Y to proceed with exiting the application: ",
+                        styles.bold,
+                    )
+                ).upper()
+                if quit_quiz == "Y":
+                    quit()
+                else:
+                    print(
+                        "\nOK, thanks for staying. Here's the question again for you..."
+                    )
+                    print(colored.stylize(f"\nQuestion {i+1}:", styles.blue_bold))
+                    print(colored.stylize(f"{question[0]}\n", styles.blue))
+                    continue
+            else:
+                print(
+                    colored.stylize(
+                        "\nInvalid answer! Please enter True or False...\n",
+                        styles.red_bold,
+                    )
+                )
+        if user_answer in question[1]:
+            user.user_score += 1
+
+
+def pass_quiz():
+    """Executes when the user passes the quiz"""
+    attempt_date = datetime.date.today()
+    expiry_date = attempt_date + datetime.timedelta(days=550)
+    print("Congratulations! You passed the quiz.")
+    print(f"Your score was {user.user_score}/20")
+    print(f"You are now certified until {expiry_date}")
+
+    try:
+        with open("./src/certified_players.csv"):
+            pass
+        with open("./src/certified_players.csv", "a") as results:
+            write_results = csv.writer(results)
+            write_results.writerow([user.user_id, attempt_date, expiry_date])
+
+    except FileNotFoundError:
+        with open("./src/certified_players.csv", "a") as results:
+            write_results = csv.writer(results)
+            write_results.writerow(["User ID", "Certification Date", "Expiry Date"])
+            write_results.writerow([user.user_id, attempt_date, expiry_date])
+
+    try:
+        with open("./src/previous_results.csv"):
+            pass
+        with open("./src/previous_results.csv", "a") as results:
+            write_results = csv.writer(results)
+            write_results.writerow([attempt_date, user.user_score, "Pass"])
+
+    except FileNotFoundError:
+        with open("./src/previous_results.csv", "a") as results:
+            write_results = csv.writer(results)
+            write_results.writerow(["Date", "Score", "Outcome"])
+            write_results.writerow([attempt_date, user.user_score, "Pass"])
+
+
+def fail_quiz():
+    """Executes when the user fails the quiz"""
+    attempt_date = datetime.date.today()
+    print(
+        f"Your score was {user.user_score}/20 and a score of at least 85% is required to pass."
+    )
+    try:
+        with open("./src/previous_results.csv"):
+            pass
+        with open("./src/previous_results.csv", "a") as results:
+            write_results = csv.writer(results)
+            write_results.writerow([attempt_date, user.user_score, "Fail"])
+
+    except FileNotFoundError:
+        with open("./src/previous_results.csv", "a") as results:
+            write_results = csv.writer(results)
+            write_results.writerow(["Date", "Score", "Outcome"])
+            write_results.writerow([attempt_date, user.user_score, "Fail"])
 
 
 def previous_results():
@@ -228,7 +309,7 @@ def previous_results():
             results = f.read()
             print(results)
 
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         print(colored.stylize("\nNo previous results available.\n", styles.red_bold))
 
     menu_or_quit()
@@ -240,104 +321,29 @@ def certified_players():
             results = f.read()
             print(results)
 
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         print("No certified players on file - please contact WFDF")
 
     menu_or_quit()
 
 
-"""When the user requests to quit, for usage in a variety of scenarios"""
-
-
 def quit():
-    print(colored.stylize("\nThank you for using the Rules Accreditation app!\n", styles.blue_bold))
+    """When the user requests to quit, for usage in a variety of scenarios"""
+    print(
+        colored.stylize(
+            "\nThank you for using the Rules Accreditation app!\n", styles.blue_bold
+        )
+    )
     sys.exit()
 
 
-"""For use at the end of a feature when the input prompt is the same"""
-
-
 def menu_or_quit():
-    prompt = input(colored.stylize(
-        'Press any key to go back to the main menu, or "\quit" to exit: ', styles.bold)
+    """For use at the end of a feature when the input prompt is the same"""
+    prompt = input(
+        colored.stylize(
+            'Press any key to go back to the main menu, or "\quit" to exit: ',
+            styles.bold,
+        )
     ).lower()
     if prompt == "\quit":
         quit()
-
-
-
-
-def return_login():
-    print(colored.stylize("\nWelcome back!\n", styles.blue_bold))
-    user._password = input(colored.stylize("Please enter your password: ", styles.bold))
-    while True:
-        for index, row in users_csv.iterrows():
-            if user._password == "\quit":
-                quit()
-            if (
-                row["user_email"] == user.email
-                and row["user_password"] == user._password
-            ):
-                user.user_id = row[
-                    "user_id"
-                ]
-                print(colored.stylize("\nLogin successful!\n", styles.blue_bold))
-                return
-            else:
-                print(colored.stylize("\nIncorrect password, please try again.\n", styles.red_bold))
-                user._password = input(colored.stylize("Please enter your password: ", styles.bold))
-                continue
-
-"""Checks that the email address of a new user is in a valid format"""
-
-def check_email():
-    valid_email = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
-    email_valid = False
-    while not email_valid:
-        if re.fullmatch(valid_email, user.email):
-            email_valid = True
-            return
-        else:
-            print(colored.stylize("\nInvalid email format, please try again.\n", styles.red_bold))
-            user.email = input(colored.stylize("\nPlease enter your email address: ", styles.bold))
-
-
-"""Checks that the password a new user is in a valid format"""
-
-
-def check_password():
-    valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
-    password_valid = False
-    while not password_valid:
-        user._password = input(colored.stylize("New password: ", styles.bold))
-        if re.fullmatch(valid_password, user._password):
-            password_valid = True
-            continue
-        else:
-            print(colored.stylize("Password does not meet required format, please try again.", styles.red_bold))
-
-
-def new_user(users_csv):
-    for row in users_ids:
-        user.user_id = random.randint(1000, 50000)
-        user.user_id = str(user.user_id)
-        if users_ids[row].astype(str).str.contains(user.user_id).any():
-            continue
-        else:
-            break
-
-    login_details = {
-        "user_email": user.email,
-        "user_password": user._password,
-        "user_id": user.user_id,
-    }
-    with open(users_csv, "a") as csv_file:
-        registered_users_rows = ["user_email", "user_password", "user_id"]
-        dict_object = csv.DictWriter(csv_file, fieldnames=registered_users_rows)
-        dict_object.writerow(login_details)
-        print(f"\nWelcome! Your user ID is {user.user_id}\n")
-
-
-users_csv = pd.read_csv("./src/registered_users.csv")
-users_emails = pd.read_csv("./src/registered_users.csv", usecols=["user_email"])
-users_ids = pd.read_csv("./src/registered_users.csv", usecols=["user_id"])
