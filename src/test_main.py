@@ -1,4 +1,5 @@
 import functions
+import main
 import csv
 
 import pytest
@@ -23,3 +24,9 @@ def test_new_user():
     print(original_length)
     print(new_length)
     assert new_length == original_length + 1
+
+
+def test_menu_selection(monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: next("option"))
+    with pytest.raises(ValueError):
+        main.menu_decision()

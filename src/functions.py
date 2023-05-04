@@ -8,6 +8,7 @@ import re
 import csv
 import datetime
 import random
+import time
 
 import pandas as pd
 import colored
@@ -33,6 +34,22 @@ class User:
 user = User("", "", "")
 
 
+def welcome():
+    print(colored.stylize("\nWelcome to the", styles.blue_bold))
+    print(emoji.emojize(colored.stylize("WFDF Rules of Ultimate :flying_disc:", styles.red_bold)))
+    print(colored.stylize("Accreditation Quiz App!\n", styles.blue_bold))
+    time.sleep(1)
+    print("You can use this app to test your knowledge of the rules of Ultimate and become a certified player.\n"
+    )
+    time.sleep(2)
+    rules_link = colored.stylize("https://rules.wfdf.org/", styles.blue_bold)
+    print(f"The official rules can be viewed here: {rules_link}\n")
+    time.sleep(2)
+    print("Documentation for this app can be found here: x")
+    print(colored.stylize("\n______________________________________________________________\n\n", styles.blue_bold))
+    time.sleep(2)
+
+
 def login():
     user.email = input(
         colored.stylize("To login or register, please enter your email address: ", styles.bold)
@@ -51,14 +68,61 @@ def login():
             print("- Contains 10 or more characters")
             check_password()
             new_user()
+    time.sleep(2)
+
+
+def main_menu():
+    print(colored.stylize("\nWFDF RULES OF ULTIMATE ACCREDITATION APP - MAIN MENU\n", styles.red_bold))
+    print(colored.stylize("1: Begin the Rules Accreditation Quiz", styles.blue))
+    print(colored.stylize("2: See your previous results", styles.blue))
+    print(colored.stylize("3: Access the database of certified players", styles.blue))
+    print(colored.stylize("4: Exit application\n", styles.blue))
+    menu_selection = input(colored.stylize("Please select an option by entering the menu number: ", styles.bold))
+    return menu_selection
+
+def menu_decision():
+    user_decision = ""
+    while user_decision != 4:
+        user_decision = main_menu()
+        try:
+            user_decision = int(user_decision)
+            if user_decision == 1:
+                quiz()
+
+            elif user_decision == 2:
+                previous_results()
+
+            elif user_decision == 3:
+                certified_players()
+
+            elif user_decision == 4:
+                pass
+
+            else:
+                print(colored.stylize(
+                    "\nInvalid menu option selected! Please try again.\nHere's the menu again for you...\n", styles.red_bold)
+                )
+                time.sleep(1)
+                continue
+
+        except ValueError:
+            print(colored.stylize(
+                "\nThat wasn't a number! Please try again.\nHere's the menu again for you...\n", styles.red_bold)
+            )
+            time.sleep(1)
+            continue
+    print(colored.stylize("\nThank you for using the Rules Accreditation app!\n", styles.blue_bold))
 
 
 def quiz():
-    print(colored.stylize("\nWelcome the WFDF Rules Accreditation Quiz.\n", styles.red_bold))
+    print(emoji.emojize(colored.stylize("\n\nWelcome the WFDF Rules Accreditation Quiz :flying_disc:\n", styles.red_bold)))
+    time.sleep(1)
     print("You can exit at any time by entering '\quit'\n")
+    time.sleep(1)
     print(
         "For each question, please answer True or False. You will see your total score at the end.\n"
     )
+    time.sleep(1)
     prompt = input(colored.stylize("Press any key to continue: ", styles.bold)).upper()
     if prompt == "\QUIT":
         quit()
@@ -165,7 +229,7 @@ def previous_results():
             print(results)
 
     except FileNotFoundError as e:
-        print("No previous results available.")
+        print(colored.stylize("\nNo previous results available.\n", styles.red_bold))
 
     menu_or_quit()
 
@@ -186,7 +250,7 @@ def certified_players():
 
 
 def quit():
-    print("Thank you for using the Rules Accreditation app!")
+    print(colored.stylize("\nThank you for using the Rules Accreditation app!\n", styles.blue_bold))
     sys.exit()
 
 
