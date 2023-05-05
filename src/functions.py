@@ -63,6 +63,7 @@ def login():
                     print("- Contains at least one lower case letter")
                     print("- Contains at least one upper case letter")
                     print("- Contains 10 or more characters\n")
+                    user._password = maskpass.askpass(prompt="New password: ", mask="#")
                     check_password()
                     new_user()
                 time.sleep(2)
@@ -89,7 +90,6 @@ def return_login():
             ):
                 user.user_id = row["user_id"]
                 print(colored.stylize("\nLogin successful!\n", styles.blue_bold))
-                print(f"Your user ID is {user.user_id}")
                 return
         if not found_user:
             print(
@@ -125,9 +125,8 @@ def check_password():
     """Checks that the password a new user is in a valid format"""
     valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
     while True:
-        user._password = maskpass.askpass(prompt="New password: ", mask="#")
         if re.fullmatch(valid_password, user._password):
-            return
+            break
         else:
             print(
                 colored.stylize(
@@ -135,13 +134,13 @@ def check_password():
                     styles.red_bold,
                 )
             )
+            user._password = maskpass.askpass(prompt="New password: ", mask="#")
             continue
 
 
 def new_user():
     """Saving the successful registration of a new user"""
-    users_csv = "./src/registered_users.csv"
-    with open(users_csv, "r") as f:
+    with open("./src/registered_users.csv", "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
             user.user_id = random.randint(1000, 50000)

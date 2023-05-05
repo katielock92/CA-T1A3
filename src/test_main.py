@@ -1,9 +1,17 @@
 import functions
+import main
 
+#tidy this up:
 import pytest
 import builtins
 import os
+import csv
+import random
+import tempfile
+from unittest import mock
+from unittest.mock import Mock, create_autospec
 from unittest.mock import MagicMock, patch, mock_open
+import io
 from io import StringIO
 
 
@@ -24,9 +32,11 @@ class MockUser:
 
 """Test 1: Previous Results"""
 
+
 @pytest.fixture
 def mock_csv_file():
     return "User ID,Date,Score,Outcome\n1,2022-01-01,17,Pass\n2,2022-01-02,7,Fail\n"
+
 
 def test_previous_results(capfd, mock_csv_file):
     """Test Case 1: checking expected results when a previous results file exists with no matches"""
@@ -36,17 +46,18 @@ def test_previous_results(capfd, mock_csv_file):
     out, err = capfd.readouterr()
     assert "No previous results available." in out
 
-
     """Test Case 2: checking expected results when a previous results file exists with a match"""
     user = MockUser("", "", "1", "")
     with patch("builtins.open", mock_open(read_data=mock_csv_file)):
         functions.previous_results(user)
     out, err = capfd.readouterr()
-    expected_output = "{'User ID': '1', 'Date': '2022-01-01', 'Score': '17', 'Outcome': 'Pass'}"
+    expected_output = (
+        "{'User ID': '1', 'Date': '2022-01-01', 'Score': '17', 'Outcome': 'Pass'}"
+    )
     assert any(expected_output in row for row in out.split("\n"))
 
     """Test Case 3: checking expected results when a previous results file doesn't exist"""
-    with patch('builtins.open', side_effect=FileNotFoundError()):
+    with patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
             functions.previous_results("test_user")
 
@@ -79,15 +90,24 @@ def test_certified_players():
 
 """Test 3: Check Email"""
 
+
 def test_check_email():
     """Test Case 1: checking expected results with a valid email format"""
-    user = type('obj', (object,), {'email': 'jane.doe@example.com'})
-    with patch('sys.stdout', new=StringIO()) as fake_out:
+    user = type("obj", (object,), {"email": "jane.doe@example.com"})
+    with patch("sys.stdout", new=StringIO()) as fake_out:
         functions.check_email(user)
-        assert fake_out.getvalue() == ''
-        
+        assert fake_out.getvalue() == ""
+
     """Test Case 2: checking expected results with an invalid email format"""
-    user = type('obj', (object,), {'email': 'janedoe@example'})
-    with patch('builtins.input', return_value='janedoe@example.com'):
+    user = type("obj", (object,), {"email": "janedoe@example"})
+    with patch("builtins.input", return_value="janedoe@example.com"):
         functions.check_email(user)
-        assert user.email == 'janedoe@example.com'
+        assert user.email == "janedoe@example.com"
+
+
+"""This is the test that is causing everything to fail!!!!"""
+
+def test_menu_selection(monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: next("option"))
+    with pytest.raises(ValueError):
+        main.menu_decision()
