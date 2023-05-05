@@ -135,6 +135,9 @@ The following default Python packages will be used in our application:
 - **datetime:** 
     - *Purpose:* to allow us to access the date and time of the user when they are running our application. This will us to write the date of quiz attempts into the .csv files that are then viewed in features 4 and 5.
     - *URL:* https://docs.python.org/3/library/datetime.html#module-datetime
+- **time:** 
+    - *Purpose:* to allow us to use a function called "sleep" which pauses processing of code and can be used for UX purposes to give the user more time to read.
+    - *URL:* https://docs.python.org/3/library/time.html
 - **random:**
     - *Purpose:* to generate a random user ID for new users within a range, rather than assigning these in sequential order.
     - *URL:* https://docs.python.org/3/library/random.html#module-random
@@ -152,9 +155,12 @@ The following **non-default** packages will be used in our application:
 - **emoji:**
     - *Purpose:* to allow for the use of emojis in our terminal application, for some added personality and visual elements.
     - *URL:* https://pypi.org/project/emoji/
+- **maskpass:**
+    - *Purpose:* to allow the user input of passwords to be concealed while they are typing.
+    - *URL:* https://pypi.org/project/maskpass/
 - **pytest**
-    - *Purpose:* xyz
-    - *URL:* TBC
+    - *Purpose:* to test our code using unit tests.
+    - *URL:* https://docs.pytest.org/en/7.3.x/
 
 ### **Testing and TDD**
 Another requirement of the application is that there are **at least TWO** tests.  In an ideal world, we should follow Test-Driven Development (TDD) and write these tests prior to coding the features, so this needs to be factored into our timeline and prioritisation.
@@ -180,6 +186,10 @@ Due to a combination of the features's priority, complexity and relationship wit
 5. *Certified players* - this feature is prioritised last as it serves as a "nice to have" and would be beneficial if we have time, though is limited in scope while there is no server for our application.
 
 Now that the feature priorities have been established, a project management board can be set up. I have opted to use Trello due to my existing experience with it, along with the fact that the basic version is free.  In addition to being included in the "Links" section, here is the URL of the Trello board for my project: https://trello.com/b/93Hv7cLh/t1a3-terminal-application-project-management
+
+This board is public and the full history of my updates can be seen.
+
+While I did try to use the original prioritisation of features, I often did jump between there was a common feature to utilise, or as I thought of new approach.  Overall the Quiz feature took the longest to complete due to the larger complexity within it.
 
 
 ___

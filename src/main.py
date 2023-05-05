@@ -64,9 +64,11 @@ def menu_decision():
 
             elif user_decision == 2:
                 functions.previous_results()
+                functions.menu_or_quit()
 
             elif user_decision == 3:
                 functions.certified_players()
+                functions.menu_or_quit()
 
             elif user_decision == 4:
                 pass

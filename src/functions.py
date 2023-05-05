@@ -43,7 +43,7 @@ def login():
         )
     ).lower()
     check_email()
-    if user.email == "\quit":
+    if user.email == "quit":
         quit()
     while True:
         try:
@@ -74,8 +74,9 @@ def return_login():
     print(colored.stylize("\nWelcome back!\n", styles.blue_bold))
     user._password = maskpass.askpass(prompt="Please enter your password: ", mask="#")
     while True:
+        found_user = False
         for index, row in pd.read_csv("./src/registered_users.csv").iterrows():
-            if user._password == "\quit":
+            if user._password == "quit":
                 quit()
             if (
                 row["user_email"] == user.email
@@ -93,7 +94,12 @@ def return_login():
                 user._password = maskpass.askpass(
                     prompt="Please enter your password: ", mask="#"
                 )
-                continue
+                found_user = True
+                break
+        if not found_user:
+            continue
+        else:
+            found_user = False
 
 
 def check_email():
@@ -133,7 +139,8 @@ def check_password():
 
 def new_user():
     """Saving the successful registration of a new user"""
-    with open("./src/registered_users.csv", "r") as f:
+    users_csv = "./src/registered_users.csv"
+    with open(users_csv, "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
             user.user_id = random.randint(1000, 50000)
@@ -166,14 +173,14 @@ def quiz():
         )
     )
     time.sleep(1)
-    print("You can exit at any time by entering '\quit'\n")
+    print('You can exit at any time by entering "quit"\n')
     time.sleep(1)
     print(
         "For each question, please answer True or False. You will see your total score at the end.\n"
     )
     time.sleep(1)
     prompt = input(colored.stylize("Press any key to continue: ", styles.bold)).upper()
-    if prompt == "\QUIT":
+    if prompt == "QUIT":
         quit()
     while True:
         new_quiz()
@@ -215,7 +222,7 @@ def new_quiz():
             user_answer = input(colored.stylize("Your answer: ", styles.bold)).upper()
             if user_answer == "TRUE" or user_answer == "FALSE":
                 break
-            elif user_answer == "\QUIT":
+            elif user_answer == "QUIT":
                 print(
                     colored.stylize(
                         "\nAre you sure you want to quit? Your progress will be lost.",
@@ -252,7 +259,9 @@ def pass_quiz():
     """Executes when the user passes the quiz"""
     attempt_date = datetime.date.today()
     expiry_date = attempt_date + datetime.timedelta(days=550)
-    print("Congratulations! You passed the quiz.")
+    print(
+        colored.stylize("\nCongratulations! You passed the quiz.\n", styles.blue_bold)
+    )
     print(f"Your score was {user.user_score}/20")
     print(f"You are now certified until {expiry_date}")
 
@@ -312,8 +321,6 @@ def previous_results():
     except FileNotFoundError:
         print(colored.stylize("\nNo previous results available.\n", styles.red_bold))
 
-    menu_or_quit()
-
 
 def certified_players():
     try:
@@ -322,9 +329,12 @@ def certified_players():
             print(results)
 
     except FileNotFoundError:
-        print("No certified players on file - please contact WFDF")
-
-    menu_or_quit()
+        print(
+            colored.stylize(
+                "\nNo certified players on file - please contact WFDF\n",
+                styles.red_bold,
+            )
+        )
 
 
 def quit():
@@ -341,9 +351,9 @@ def menu_or_quit():
     """For use at the end of a feature when the input prompt is the same"""
     prompt = input(
         colored.stylize(
-            'Press any key to go back to the main menu, or "\quit" to exit: ',
+            'Press any key to go back to the main menu, or "quit" to exit: ',
             styles.bold,
         )
     ).lower()
-    if prompt == "\quit":
+    if prompt == "quit":
         quit()
