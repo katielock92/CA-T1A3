@@ -63,11 +63,11 @@ def menu_decision():
                 functions.quiz()
 
             elif user_decision == 2:
-                functions.previous_results()
+                functions.previous_results(functions.user)
                 functions.menu_or_quit()
 
             elif user_decision == 3:
-                functions.certified_players()
+                functions.certified_players(functions.user)
                 functions.menu_or_quit()
 
             elif user_decision == 4:

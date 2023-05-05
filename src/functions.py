@@ -49,19 +49,24 @@ def login():
         try:
             with open("./src/registered_users.csv", "r") as f:
                 reader = csv.DictReader(f)
+                user_exists = False
                 for row in reader:
                     if row["user_email"] == user.email:
-                        return_login()
-                    else:
-                        print("\nTo sign up, please set your password.")
-                        print("Your password must meet the following conditions:")
-                        print("- Contains at least one lower case letter")
-                        print("- Contains at least one upper case letter")
-                        print("- Contains 10 or more characters\n")
-                        check_password()
-                        new_user()
-                    time.sleep(2)
-                    return
+                        user_exists = True
+                        break
+                if user_exists:
+                    return_login()
+
+                else:
+                    print("\nTo sign up, please set your password.")
+                    print("Your password must meet the following conditions:")
+                    print("- Contains at least one lower case letter")
+                    print("- Contains at least one upper case letter")
+                    print("- Contains 10 or more characters\n")
+                    check_password()
+                    new_user()
+                time.sleep(2)
+                return
         except FileNotFoundError:
             with open("./src/registered_users.csv", "a") as f:
                 new_file = csv.writer(f)
@@ -84,22 +89,18 @@ def return_login():
             ):
                 user.user_id = row["user_id"]
                 print(colored.stylize("\nLogin successful!\n", styles.blue_bold))
+                print(f"Your user ID is {user.user_id}")
                 return
-            else:
-                print(
-                    colored.stylize(
-                        "\nIncorrect password, please try again.\n", styles.red_bold
-                    )
-                )
-                user._password = maskpass.askpass(
-                    prompt="Please enter your password: ", mask="#"
-                )
-                found_user = True
-                break
         if not found_user:
-            continue
-        else:
-            found_user = False
+            print(
+                colored.stylize(
+                    "\nIncorrect password, please try again.\n", styles.red_bold
+                )
+            )
+            user._password = maskpass.askpass(
+                prompt="Please enter your password: ", mask="#"
+            )
+            found_user = True
 
 
 def check_email():
@@ -183,15 +184,15 @@ def quiz():
     if prompt == "QUIT":
         quit()
     while True:
-        new_quiz()
+        new_quiz(user)
         if user.user_score >= 17:
-            pass_quiz()
+            pass_quiz(user)
             print(colored.stylize("\nReturning the main menu...\n", styles.blue_bold))
             time.sleep(1.5)
             break
 
         else:
-            fail_quiz()
+            fail_quiz(user)
             try_again = input(
                 "Would you like to try the quiz again? Enter Y for Yes: "
             ).upper()
@@ -207,7 +208,7 @@ def quiz():
     menu_or_quit()
 
 
-def new_quiz():
+def new_quiz(user):
     """Inner loop for each unique quiz instance"""
     questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
     quiz_dict = {}
@@ -255,7 +256,7 @@ def new_quiz():
             user.user_score += 1
 
 
-def pass_quiz():
+def pass_quiz(user):
     """Executes when the user passes the quiz"""
     attempt_date = datetime.date.today()
     expiry_date = attempt_date + datetime.timedelta(days=550)
@@ -283,16 +284,20 @@ def pass_quiz():
             pass
         with open("./src/previous_results.csv", "a") as results:
             write_results = csv.writer(results)
-            write_results.writerow([attempt_date, user.user_score, "Pass"])
+            write_results.writerow(
+                [user.user_id, attempt_date, user.user_score, "Pass"]
+            )
 
     except FileNotFoundError:
         with open("./src/previous_results.csv", "a") as results:
             write_results = csv.writer(results)
-            write_results.writerow(["Date", "Score", "Outcome"])
-            write_results.writerow([attempt_date, user.user_score, "Pass"])
+            write_results.writerow(["User ID", "Date", "Score", "Outcome"])
+            write_results.writerow(
+                [user.user_id, attempt_date, user.user_score, "Pass"]
+            )
 
 
-def fail_quiz():
+def fail_quiz(user):
     """Executes when the user fails the quiz"""
     attempt_date = datetime.date.today()
     print(
@@ -303,26 +308,48 @@ def fail_quiz():
             pass
         with open("./src/previous_results.csv", "a") as results:
             write_results = csv.writer(results)
-            write_results.writerow([attempt_date, user.user_score, "Fail"])
+            write_results.writerow(
+                [user.user_id, attempt_date, user.user_score, "Fail"]
+            )
 
     except FileNotFoundError:
         with open("./src/previous_results.csv", "a") as results:
             write_results = csv.writer(results)
-            write_results.writerow(["Date", "Score", "Outcome"])
-            write_results.writerow([attempt_date, user.user_score, "Fail"])
+            write_results.writerow(["User ID", "Date", "Score", "Outcome"])
+            write_results.writerow(
+                [user.user_id, attempt_date, user.user_score, "Fail"]
+            )
 
 
-def previous_results():
-    try:
-        with open("./src/previous_results.csv") as f:
-            results = f.read()
-            print(results)
+def previous_results(user):
+    matching_results = []
+    while True:
+        try:
+            with open("./src/previous_results.csv") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if str(user.user_id) in row["User ID"]:
+                        matching_results.append(row)
+                if len(matching_results) > 0:
+                    for row in matching_results:
+                        print(row)
+                    return
+                else:
+                    print(
+                        colored.stylize(
+                            "\nNo previous results available.\n", styles.red_bold
+                        )
+                    )
+                    return
 
-    except FileNotFoundError:
-        print(colored.stylize("\nNo previous results available.\n", styles.red_bold))
+        except FileNotFoundError:
+            with open("./src/previous_results.csv", "a") as f:
+                new_file = csv.writer(f)
+                new_file.writerow(["User ID", "Date", "Score", "Outcome"])
+                continue
 
 
-def certified_players():
+def certified_players(user):
     try:
         with open("./src/certified_players.csv") as f:
             results = f.read()
