@@ -4,6 +4,7 @@ import pytest
 import builtins
 import os
 from unittest.mock import MagicMock, patch, mock_open
+from io import StringIO
 
 
 class MockUser:
@@ -75,3 +76,18 @@ def test_certified_players():
             expected_output = "\nNo certified players on file - please contact WFDF\n"
             mock_print.assert_called_with(expected_output)
 
+
+"""Test 3: Check Email"""
+
+def test_check_email():
+    """Test Case 1: checking expected results with a valid email format"""
+    user = type('obj', (object,), {'email': 'jane.doe@example.com'})
+    with patch('sys.stdout', new=StringIO()) as fake_out:
+        functions.check_email(user)
+        assert fake_out.getvalue() == ''
+        
+    """Test Case 2: checking expected results with an invalid email format"""
+    user = type('obj', (object,), {'email': 'janedoe@example'})
+    with patch('builtins.input', return_value='janedoe@example.com'):
+        functions.check_email(user)
+        assert user.email == 'janedoe@example.com'

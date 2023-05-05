@@ -67,7 +67,7 @@ def menu_decision():
                 functions.menu_or_quit()
 
             elif user_decision == 3:
-                functions.certified_players(functions.user)
+                functions.certified_players()
                 functions.menu_or_quit()
 
             elif user_decision == 4:

@@ -42,7 +42,7 @@ def login():
             "To login or register, please enter your email address: ", styles.bold
         )
     ).lower()
-    check_email()
+    check_email(user)
     if user.email == "quit":
         quit()
     while True:
@@ -103,7 +103,7 @@ def return_login():
             found_user = True
 
 
-def check_email():
+def check_email(user):
     """Checks that the email address is in a valid format"""
     valid_email = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
     while True:
@@ -349,7 +349,7 @@ def previous_results(user):
                 continue
 
 
-def certified_players(user):
+def certified_players():
     try:
         with open("./src/certified_players.csv") as f:
             results = f.read()
