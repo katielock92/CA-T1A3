@@ -21,12 +21,14 @@ class MockUser:
         user_id: the unique integer User ID for this user
     """
 
-    def __init__(self, email, password, user_id, user_score):
+    def __init__(self, email, password, user_id, user_score, attempt_date, expiry_date):
         """Initialises the instance for each user."""
         self.email = email
         self._password = password
         self.user_id = user_id
         self.user_score = user_score
+        self.attempt_date = attempt_date
+        self.expiry_date = expiry_date
 
 
 """Test 1: Previous Results"""
@@ -39,14 +41,14 @@ def mock_csv_file():
 
 def test_previous_results(capfd, mock_csv_file):
     """Test Case 1: checking expected results when a previous results file exists with no matches"""
-    user = MockUser("", "", "3", "")
+    user = MockUser("", "", "3", "", "", "")
     with patch("builtins.open", mock_open(read_data=mock_csv_file)):
         functions.previous_results(user)
     out, err = capfd.readouterr()
     assert "No previous results available." in out
 
     """Test Case 2: checking expected results when a previous results file exists with a match"""
-    user = MockUser("", "", "1", "")
+    user = MockUser("", "", "1", "", "", "")
     with patch("builtins.open", mock_open(read_data=mock_csv_file)):
         functions.previous_results(user)
     out, err = capfd.readouterr()
@@ -101,3 +103,72 @@ def test_check_email():
     with patch("builtins.input", return_value="janedoe@example.com"):
         functions.check_email(user)
         assert user.email == "janedoe@example.com"
+
+
+"""Test 4: Menu Decision"""
+
+
+def test_menu_selection(monkeypatch):
+    """Test Case 1: checking that an error is caught when str input received"""
+    monkeypatch.setattr("builtins.input", lambda _: next("a"))
+    with pytest.raises(TypeError) or pytest.raises(ValueError):
+        functions.menu_decision()
+
+    # TODO add test case for invalid number - currently getting a type error
+
+
+"""Test 5: Fail Quiz"""
+
+
+def test_fail_quiz():
+    user = MockUser("", "", "11111", "10", "2023-05-05", "")
+
+    """Test Case 1: checking that correct output text is displayed based on user quiz"""
+    with patch("builtins.print") as mock_print:
+        functions.fail_quiz_text(user)
+
+        expected_output = (
+            "\nYour score was 10/20 and a score of at least 85% is required to pass.\n"
+        )
+        mock_print.assert_called_with(expected_output)
+
+    """Test Case 2: checking expected results when a previous results file does exist"""
+    # TODO mock write to file and check it has the expected output
+
+    """Test Case 3: checking expected results when a previous results file doesn't exist"""
+    with patch("builtins.open", side_effect=FileNotFoundError()):
+        with pytest.raises(FileNotFoundError):
+            functions.fail_quiz_results(user)
+
+
+"""Test 6: Pass Quiz"""
+
+
+def test_pass_quiz():
+    user = MockUser("", "", "11111", "17", "2023-05-05", "2024-11-05")
+
+    """Test Case 1: checking that correct output text is displayed based on user quiz"""
+    with patch("builtins.print") as mock_print:
+        functions.pass_quiz_text(user)
+
+        expected_output = "You are now certified until 2024-11-05"
+        mock_print.assert_called_with(expected_output)
+
+    """Test Case 2: checking expected results when a previous results file does exist"""
+    # TODO mock write to file and check it has the expected output
+
+    """Test Case 3: checking expected results when a previous results file doesn't exist"""
+    with patch("builtins.open", side_effect=FileNotFoundError()):
+        with pytest.raises(FileNotFoundError):
+            functions.pass_quiz_results(user)
+
+    """Test Case 4: checking expected results when a certified players file does exist"""
+    # TODO mock write to file and check it has the expected output
+
+    """Test Case 5: checking expected results when a certified players file doesn't exist"""
+    with patch("builtins.open", side_effect=FileNotFoundError()):
+        with pytest.raises(FileNotFoundError):
+            functions.pass_quiz_certified(user)
+
+
+"""Test 7: New Quiz"""

@@ -25,15 +25,17 @@ class User:
         user_id: the unique integer User ID for this user
     """
 
-    def __init__(self, email, password, user_id, user_score):
+    def __init__(self, email, password, user_id, user_score, attempt_date, expiry_date):
         """Initialises the instance for each user."""
         self.email = email
         self._password = password
         self.user_id = user_id
         self.user_score = user_score
+        self.attempt_date = attempt_date
+        self.expiry_date = expiry_date
 
 
-user = User("", "", "", "")
+user = User("", "", "", "", "", "")
 
 
 def welcome():
@@ -210,18 +212,17 @@ def main_menu():
     print(colored.stylize("2: See your previous results", styles.blue))
     print(colored.stylize("3: Access the database of certified players", styles.blue))
     print(colored.stylize("4: Exit application\n", styles.blue))
-    menu_selection = input(
-        colored.stylize(
-            "Please select an option by entering the menu number: ", styles.bold
-        )
-    )
-    return menu_selection
 
 
 def menu_decision():
     user_decision = ""
     while user_decision != 4:
-        user_decision = main_menu()
+        main_menu()
+        user_decision = input(
+            colored.stylize(
+                "Please select an option by entering the menu number: ", styles.bold
+            )
+        )
         try:
             user_decision = int(user_decision)
             if user_decision == 1:
@@ -256,7 +257,7 @@ def menu_decision():
                 time.sleep(1)
                 continue
 
-        except ValueError:
+        except ValueError or TypeError:
             print(
                 emoji.emojize(
                     colored.stylize(
@@ -366,10 +367,7 @@ def new_quiz(user):
             user.user_score += 1
 
 
-def pass_quiz(user):
-    """Executes when the user passes the quiz"""
-    attempt_date = datetime.date.today()
-    expiry_date = attempt_date + datetime.timedelta(days=550)
+def pass_quiz_text(user):
     print(
         emoji.emojize(
             colored.stylize(
@@ -379,28 +377,34 @@ def pass_quiz(user):
         )
     )
     print(colored.stylize(f"Your score was {user.user_score}/20", styles.bold))
-    print(colored.stylize(f"You are now certified until {expiry_date}", styles.bold))
+    print(
+        colored.stylize(f"You are now certified until {user.expiry_date}", styles.bold)
+    )
 
+
+def pass_quiz_certified(user):
     try:
         with open("./src/certified_players.csv"):
             pass
         with open("./src/certified_players.csv", "a") as results:
             write_results = csv.writer(results)
-            write_results.writerow([user.user_id, attempt_date, expiry_date])
+            write_results.writerow([user.user_id, user.attempt_date, user.expiry_date])
 
     except FileNotFoundError:
         with open("./src/certified_players.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(["User ID", "Certification Date", "Expiry Date"])
-            write_results.writerow([user.user_id, attempt_date, expiry_date])
+            write_results.writerow([user.user_id, user.attempt_date, user.expiry_date])
 
+
+def pass_quiz_results(user):
     try:
         with open("./src/previous_results.csv"):
             pass
         with open("./src/previous_results.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(
-                [user.user_id, attempt_date, user.user_score, "Pass"]
+                [user.user_id, user.attempt_date, user.user_score, "Pass"]
             )
 
     except FileNotFoundError:
@@ -408,13 +412,20 @@ def pass_quiz(user):
             write_results = csv.writer(results)
             write_results.writerow(["User ID", "Date", "Score", "Outcome"])
             write_results.writerow(
-                [user.user_id, attempt_date, user.user_score, "Pass"]
+                [user.user_id, user.attempt_date, user.user_score, "Pass"]
             )
 
 
-def fail_quiz(user):
-    """Executes when the user fails the quiz"""
-    attempt_date = datetime.date.today()
+def pass_quiz(user):
+    """Executes when the user passes the quiz"""
+    user.attempt_date = datetime.date.today()
+    user.expiry_date = user.attempt_date + datetime.timedelta(days=550)
+    pass_quiz_text(user)
+    pass_quiz_certified(user)
+    pass_quiz_results(user)
+
+
+def fail_quiz_text(user):
     print(
         emoji.emojize(
             colored.stylize(
@@ -429,13 +440,17 @@ def fail_quiz(user):
             styles.bold,
         )
     )
+
+
+def fail_quiz_results(user):
+    user.attempt_date = datetime.date.today()
     try:
         with open("./src/previous_results.csv"):
             pass
         with open("./src/previous_results.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(
-                [user.user_id, attempt_date, user.user_score, "Fail"]
+                [user.user_id, user.attempt_date, user.user_score, "Fail"]
             )
 
     except FileNotFoundError:
@@ -443,8 +458,14 @@ def fail_quiz(user):
             write_results = csv.writer(results)
             write_results.writerow(["User ID", "Date", "Score", "Outcome"])
             write_results.writerow(
-                [user.user_id, attempt_date, user.user_score, "Fail"]
+                [user.user_id, user.attempt_date, user.user_score, "Fail"]
             )
+
+
+def fail_quiz(user):
+    """Executes when the user fails the quiz"""
+    fail_quiz_text(user)
+    fail_quiz_results(user)
 
 
 def previous_results(user):

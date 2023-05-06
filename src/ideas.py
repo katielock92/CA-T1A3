@@ -143,3 +143,20 @@ def test_new_quiz(questions_csv, monkeypatch):
     functions.new_quiz(user)
     assert user.user_score == 13
 
+
+
+    def test_email_input(self, capsys, mock_user):
+        mock_input = mock.Mock(side_effect=["invalid_email", "testuser@example.com"])
+        with mock.patch("builtins.input", mock_input):
+            functions.check_email(mock_user)
+            assert mock_user.email == "testuser@example.com"
+            captured = capsys.readouterr()
+            assert "Invalid email format, please try again." in captured.out
+        
+    def test_check_password(self, mock_user):
+        mock_input = mock.Mock(side_effect=["invalidpassword", "Validpassword1"])
+        with mock.patch("functions.maskpass.askpass", mock_input):
+            functions.check_password()
+            assert mock_user._password == "Validpassword1"
+
+
