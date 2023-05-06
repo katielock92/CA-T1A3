@@ -79,7 +79,7 @@ def login():
         quit()
     while True:
         try:
-            with open("./src/registered_users.csv", "r") as f:
+            with open("registered_users.csv", "r") as f:
                 reader = csv.DictReader(f)
                 user_exists = False
                 for row in reader:
@@ -101,7 +101,7 @@ def login():
                 time.sleep(2)
                 return
         except FileNotFoundError:
-            with open("./src/registered_users.csv", "a") as f:
+            with open("registered_users.csv", "a") as f:
                 new_file = csv.writer(f)
                 new_file.writerow(["user_email", "user_password", "user_id"])
                 continue
@@ -113,7 +113,7 @@ def return_login():
     user._password = maskpass.askpass(prompt="Please enter your password: ", mask="#")
     while True:
         found_user = False
-        for index, row in pd.read_csv("./src/registered_users.csv").iterrows():
+        for index, row in pd.read_csv("registered_users.csv").iterrows():
             if user._password == "quit":
                 quit()
             if (
@@ -180,7 +180,7 @@ def check_password():
 
 def new_user():
     """Saving the successful registration of a new user"""
-    with open("./src/registered_users.csv", "r") as f:
+    with open("registered_users.csv", "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
             user.user_id = random.randint(1000, 50000)
@@ -195,7 +195,7 @@ def new_user():
         "user_password": user._password,
         "user_id": user.user_id,
     }
-    with open("./src/registered_users.csv", "a") as f:
+    with open("registered_users.csv", "a") as f:
         registered_users_rows = ["user_email", "user_password", "user_id"]
         writer = csv.DictWriter(f, fieldnames=registered_users_rows)
         writer.writerow(login_details)
@@ -276,7 +276,7 @@ def menu_decision():
 def check_quiz():
     """Error handling provision in case quiz questions file goes missing"""
     try:
-        with open("./src/quiz_questions.csv", "r"):
+        with open("quiz_questions.csv", "r"):
             pass
         quiz()
     except FileNotFoundError:
@@ -339,7 +339,7 @@ def quiz():
 
 def new_quiz(user):
     """Inner loop for each unique quiz instance"""
-    questions_csv = csv.reader(open("./src/quiz_questions.csv", "r"))
+    questions_csv = csv.reader(open("quiz_questions.csv", "r"))
     quiz_dict = {}
     for row in questions_csv:
         quiz_dict[row[0]] = row[1:]
@@ -412,14 +412,14 @@ def pass_quiz_text(user):
 
 def pass_quiz_certified(user):
     try:
-        with open("./src/certified_players.csv"):
+        with open("certified_players.csv"):
             pass
-        with open("./src/certified_players.csv", "a") as results:
+        with open("certified_players.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow([user.user_id, user.attempt_date, user.expiry_date])
 
     except FileNotFoundError:
-        with open("./src/certified_players.csv", "a") as results:
+        with open("certified_players.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(["User ID", "Certification Date", "Expiry Date"])
             write_results.writerow([user.user_id, user.attempt_date, user.expiry_date])
@@ -427,16 +427,16 @@ def pass_quiz_certified(user):
 
 def pass_quiz_results(user):
     try:
-        with open("./src/previous_results.csv"):
+        with open("previous_results.csv"):
             pass
-        with open("./src/previous_results.csv", "a") as results:
+        with open("previous_results.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(
                 [user.user_id, user.attempt_date, user.user_score, "Pass"]
             )
 
     except FileNotFoundError:
-        with open("./src/previous_results.csv", "a") as results:
+        with open("previous_results.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(["User ID", "Date", "Score", "Outcome"])
             write_results.writerow(
@@ -473,16 +473,16 @@ def fail_quiz_text(user):
 def fail_quiz_results(user):
     user.attempt_date = datetime.date.today()
     try:
-        with open("./src/previous_results.csv"):
+        with open("previous_results.csv"):
             pass
-        with open("./src/previous_results.csv", "a") as results:
+        with open("previous_results.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(
                 [user.user_id, user.attempt_date, user.user_score, "Fail"]
             )
 
     except FileNotFoundError:
-        with open("./src/previous_results.csv", "a") as results:
+        with open("previous_results.csv", "a") as results:
             write_results = csv.writer(results)
             write_results.writerow(["User ID", "Date", "Score", "Outcome"])
             write_results.writerow(
@@ -500,7 +500,7 @@ def previous_results(user):
     matching_results = []
     while True:
         try:
-            with open("./src/previous_results.csv") as f:
+            with open("previous_results.csv") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     if str(user.user_id) in row["User ID"]:
@@ -520,7 +520,7 @@ def previous_results(user):
                     return
 
         except FileNotFoundError:
-            with open("./src/previous_results.csv", "a") as f:
+            with open("previous_results.csv", "a") as f:
                 new_file = csv.writer(f)
                 new_file.writerow(["User ID", "Date", "Score", "Outcome"])
                 continue
@@ -528,7 +528,7 @@ def previous_results(user):
 
 def certified_players():
     try:
-        with open("./src/certified_players.csv") as file:
+        with open("certified_players.csv") as file:
             results = file.read()
             print(f"\n{results}\n")
 
