@@ -36,6 +36,33 @@ class User:
 user = User("", "", "", "")
 
 
+def welcome():
+    print(colored.stylize("\nWelcome to the", styles.blue_bold))
+    print(
+        emoji.emojize(
+            colored.stylize("WFDF Rules of Ultimate :flying_disc:", styles.red_bold)
+        )
+    )
+    print(colored.stylize("Accreditation Quiz App!\n", styles.blue_bold))
+    # time.sleep(1)
+    print(
+        "You can use this app to test your knowledge of the rules of Ultimate and "
+        "become a certified player.\n"
+    )
+    # time.sleep(1.5)
+    rules_link = colored.stylize("https://rules.wfdf.org/", styles.blue_bold)
+    print(f"The official rules can be viewed here: {rules_link}\n")
+    # time.sleep(1.5)
+    print("Documentation for this app can be found here: x")
+    print(
+        colored.stylize(
+            "\n______________________________________________________________\n\n",
+            styles.blue_bold,
+        )
+    )
+    # time.sleep(1.5)
+
+
 def login():
     user.email = input(
         colored.stylize(
@@ -93,8 +120,11 @@ def return_login():
                 return
         if not found_user:
             print(
-                colored.stylize(
-                    "\nIncorrect password, please try again.\n", styles.red_bold
+                emoji.emojize(
+                    colored.stylize(
+                        "\n:red_exclamation_mark: Incorrect password, please try again.\n",
+                        styles.red_bold,
+                    )
                 )
             )
             user._password = maskpass.askpass(
@@ -111,8 +141,11 @@ def check_email(user):
             return
         else:
             print(
-                colored.stylize(
-                    "\nInvalid email format, please try again.\n", styles.red_bold
+                emoji.emojize(
+                    colored.stylize(
+                        "\n:red_exclamation_mark: Invalid email format, please try again.\n",
+                        styles.red_bold,
+                    )
                 )
             )
             user.email = input(
@@ -129,9 +162,11 @@ def check_password():
             break
         else:
             print(
-                colored.stylize(
-                    "\nPassword does not meet required format, please try again.\n",
-                    styles.red_bold,
+                emoji.emojize(
+                    colored.stylize(
+                        "\n:red_exclamation_mark: Password does not meet required format, please try again.\n",
+                        styles.red_bold,
+                    )
                 )
             )
             user._password = maskpass.askpass(prompt="New password: ", mask="#")
@@ -160,6 +195,78 @@ def new_user():
         writer = csv.DictWriter(f, fieldnames=registered_users_rows)
         writer.writerow(login_details)
         print(f"\nWelcome! Your user ID is {user.user_id}\n")
+
+
+def main_menu():
+    print(
+        emoji.emojize(
+            colored.stylize(
+                "\nWFDF RULES OF ULTIMATE ACCREDITATION APP :flying_disc:\nMAIN MENU\n",
+                styles.red_bold,
+            )
+        )
+    )
+    print(colored.stylize("1: Begin the Rules Accreditation Quiz", styles.blue))
+    print(colored.stylize("2: See your previous results", styles.blue))
+    print(colored.stylize("3: Access the database of certified players", styles.blue))
+    print(colored.stylize("4: Exit application\n", styles.blue))
+    menu_selection = input(
+        colored.stylize(
+            "Please select an option by entering the menu number: ", styles.bold
+        )
+    )
+    return menu_selection
+
+
+def menu_decision():
+    user_decision = ""
+    while user_decision != 4:
+        user_decision = main_menu()
+        try:
+            user_decision = int(user_decision)
+            if user_decision == 1:
+                quiz()
+
+            elif user_decision == 2:
+                previous_results(user)
+                menu_or_quit()
+
+            elif user_decision == 3:
+                certified_players()
+                menu_or_quit()
+
+            elif user_decision == 4:
+                pass
+
+            else:
+                print(
+                    emoji.emojize(
+                        colored.stylize(
+                            "\n:red_exclamation_mark: Invalid menu option selected! Please try again.\n",
+                            styles.red_bold,
+                        )
+                    )
+                )
+                print(
+                    colored.stylize(
+                        "Here's the menu again for you...\n",
+                        styles.red_bold,
+                    )
+                )
+                time.sleep(1)
+                continue
+
+        except ValueError:
+            print(
+                emoji.emojize(
+                    colored.stylize(
+                        "\n:red_exclamation_mark: That wasn't a number! Please try again.\nHere's the menu again for you...\n",
+                        styles.red_bold,
+                    )
+                )
+            )
+            time.sleep(1)
+            continue
 
 
 def quiz():
@@ -224,14 +331,16 @@ def new_quiz(user):
                 break
             elif user_answer == "QUIT":
                 print(
-                    colored.stylize(
-                        "\nAre you sure you want to quit? Your progress will be lost.",
-                        styles.red_bold,
+                    emoji.emojize(
+                        colored.stylize(
+                            "\n:red_exclamation_mark: Are you sure you want to quit? Your progress will be lost.",
+                            styles.red_bold,
+                        )
                     )
                 )
                 quit_quiz = input(
                     colored.stylize(
-                        "Enter Y to proceed with exiting the application: ",
+                        "\nEnter Y to proceed with exiting the application: ",
                         styles.bold,
                     )
                 ).upper()
@@ -246,9 +355,11 @@ def new_quiz(user):
                     continue
             else:
                 print(
-                    colored.stylize(
-                        "\nInvalid answer! Please enter True or False...\n",
-                        styles.red_bold,
+                    emoji.emojize(
+                        colored.stylize(
+                            "\n:red_exclamation_mark: Invalid answer! Please enter True or False...\n",
+                            styles.red_bold,
+                        )
                     )
                 )
         if user_answer in question[1]:
@@ -260,10 +371,15 @@ def pass_quiz(user):
     attempt_date = datetime.date.today()
     expiry_date = attempt_date + datetime.timedelta(days=550)
     print(
-        colored.stylize("\nCongratulations! You passed the quiz.\n", styles.blue_bold)
+        emoji.emojize(
+            colored.stylize(
+                "\n:party_popper: Congratulations! You passed the quiz.\n",
+                styles.blue_bold,
+            )
+        )
     )
-    print(f"Your score was {user.user_score}/20")
-    print(f"You are now certified until {expiry_date}")
+    print(colored.stylize(f"Your score was {user.user_score}/20", styles.bold))
+    print(colored.stylize(f"You are now certified until {expiry_date}", styles.bold))
 
     try:
         with open("./src/certified_players.csv"):
@@ -300,7 +416,18 @@ def fail_quiz(user):
     """Executes when the user fails the quiz"""
     attempt_date = datetime.date.today()
     print(
-        f"Your score was {user.user_score}/20 and a score of at least 85% is required to pass."
+        emoji.emojize(
+            colored.stylize(
+                "\n:disappointed_face: Sorry, you didn't pass this time.",
+                styles.blue_bold,
+            )
+        )
+    )
+    print(
+        colored.stylize(
+            f"\nYour score was {user.user_score}/20 and a score of at least 85% is required to pass.\n",
+            styles.bold,
+        )
     )
     try:
         with open("./src/previous_results.csv"):
@@ -330,8 +457,10 @@ def previous_results(user):
                     if str(user.user_id) in row["User ID"]:
                         matching_results.append(row)
                 if len(matching_results) > 0:
+                    print("\n")
                     for row in matching_results:
                         print(row)
+                    print("\n")
                     return
                 else:
                     print(
@@ -350,15 +479,17 @@ def previous_results(user):
 
 def certified_players():
     try:
-        with open("./src/certified_players.csv") as f:
-            results = f.read()
-            print(results)
+        with open("./src/certified_players.csv") as file:
+            results = file.read()
+            print(f"\n{results}\n")
 
     except FileNotFoundError:
         print(
-            colored.stylize(
-                "\nNo certified players on file - please contact WFDF\n",
-                styles.red_bold,
+            emoji.emojize(
+                colored.stylize(
+                    "\n:red_exclamation_mark: No certified players on file - please contact WFDF\n",
+                    styles.red_bold,
+                )
             )
         )
 
@@ -366,8 +497,11 @@ def certified_players():
 def quit():
     """When the user requests to quit, for usage in a variety of scenarios"""
     print(
-        colored.stylize(
-            "\nThank you for using the Rules Accreditation app!\n", styles.blue_bold
+        emoji.emojize(
+            colored.stylize(
+                "\n:waving_hand: Thank you for using the Rules Accreditation app!\n",
+                styles.blue_bold,
+            )
         )
     )
     sys.exit()

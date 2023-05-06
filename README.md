@@ -123,9 +123,9 @@ If option 3 is selected from the main menu:
     - *if* main menu, return to start of outer loop
     - *else* an *except* error will occur, gracefully exiting the application
 ### **Packages**
-In addition to the use of variables, loops, control flow and functions (to make the above features happen), we need to utilise Python packages.  For this assessment, we need to import at least **four** Python packages outside of the default Python packages, and *extensively use* functions from at least one of these.
+In addition to the use of variables, loops, control flow and functions (to make the above features happen), we need to utilise Python packages.  For this assessment, we need to import at least **four** Python packages and *extensively use* functions from at least one of these.
 
-The following default Python packages will be used in our application:
+The following default Python packages will be used in my application:
 - **csv:**
     - *Purpose:* to allow us to create, read and write to .csv files in our application.
     - *URL:* https://docs.python.org/3/library/csv.html#module-csv
@@ -167,13 +167,15 @@ Another requirement of the application is that there are **at least TWO** tests.
 
 However when reviewing my features and what types of test cases I could run, there are not a large number of feasible test cases that could be written *before* commencing development, given the app primarily operates through user inputs and file handling rather than too many operational functions.
 
-Some initial ideas for test cases include:
-1. checking that the scores calculated in the quiz are operating as expected
-2. checking that new user registrations are correctly adding a new row to the registered users file
-3. checking that the completion of a quiz correctly adds to the user's previous results file
-4. checking that completing the quiz with a passing score correctly adds to the certified players file
+The unit tests through Pytest that I have prepared are as follows:
+1. **Testing the Previous Results feature:**
+    - The first test case confirms that when there are no previous results for a given user ID, the expected output displays
+    - The second test case confirms that the correct text is returned when there are previous results for a given user ID
+    - The third test case checks that a FileNotFound error occurs when the .csv file for previous results is missing
 
-My first test case written was for idea 2, and was written once the core features had been coded and were operating without error, but prior to refactoring.
+2. **Testing the Certified Players feature:**
+    - x
+    - x
 
 
 

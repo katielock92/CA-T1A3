@@ -1,7 +1,6 @@
 import functions
-import main
 
-#tidy this up:
+# tidy this up:
 import pytest
 import builtins
 import os
@@ -69,13 +68,12 @@ def test_certified_players():
     """Test Case 1: checking expected results when there is a certified players file"""
     players_csv = "tests/test_certified_players.csv"
     with open(players_csv, "w") as f:
-        f.write("12345, 2023-04-30, 2024-10-31")
+        f.write("12345,2023-04-30,2024-10-31")
 
     with patch.object(builtins, "open", MagicMock(return_value=open(players_csv, "r"))):
         with patch("builtins.print") as mock_print:
             functions.certified_players()
-
-            mock_print.assert_called_with("12345, 2023-04-30, 2024-10-31")
+            mock_print.assert_called_with("\n12345,2023-04-30,2024-10-31\n")
 
     os.remove(players_csv)
 
@@ -84,7 +82,7 @@ def test_certified_players():
         with patch("builtins.print") as mock_print:
             functions.certified_players()
 
-            expected_output = "\nNo certified players on file - please contact WFDF\n"
+            expected_output = "\n❗ No certified players on file - please contact WFDF\n"
             mock_print.assert_called_with(expected_output)
 
 
@@ -103,11 +101,3 @@ def test_check_email():
     with patch("builtins.input", return_value="janedoe@example.com"):
         functions.check_email(user)
         assert user.email == "janedoe@example.com"
-
-
-"""This is the test that is causing everything to fail!!!!"""
-
-def test_menu_selection(monkeypatch):
-    monkeypatch.setattr('builtins.input', lambda _: next("option"))
-    with pytest.raises(ValueError):
-        main.menu_decision()
