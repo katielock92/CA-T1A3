@@ -1,27 +1,21 @@
-import functions
-
-# tidy this up:
-import pytest
 import builtins
 import os
 import csv
 import random
-import tempfile
-from unittest import mock
-from unittest.mock import Mock, create_autospec
-from unittest.mock import MagicMock, patch, mock_open
 import io
-from io import StringIO
+import unittest.mock
+
+import pytest
+
+import functions
 
 
 class MockUser:
-    """Defines what features each unique user needs.
+    """Mock of the User class for testing purposes. Defines the unique variables for each user."""
 
-    Attributes:
-        user_id: the unique integer User ID for this user
-    """
-
-    def __init__(self, email, password, user_id, user_score, attempt_date, expiry_date):
+    def __init__(
+        self, email, password, user_id, user_score, attempt_date, expiry_date, questions
+    ):
         """Initialises the instance for each user."""
         self.email = email
         self._password = password
@@ -29,6 +23,7 @@ class MockUser:
         self.user_score = user_score
         self.attempt_date = attempt_date
         self.expiry_date = expiry_date
+        self.questions = questions
 
 
 """Test 1: Previous Results"""
@@ -41,15 +36,19 @@ def mock_csv_file():
 
 def test_previous_results(capfd, mock_csv_file):
     """Test Case 1: checking expected results when a previous results file exists with no matches"""
-    user = MockUser("", "", "3", "", "", "")
-    with patch("builtins.open", mock_open(read_data=mock_csv_file)):
+    user = MockUser("", "", "3", "", "", "", "")
+    with unittest.mock.patch(
+        "builtins.open", unittest.mock.mock_open(read_data=mock_csv_file)
+    ):
         functions.previous_results(user)
     out, err = capfd.readouterr()
     assert "No previous results available." in out
 
     """Test Case 2: checking expected results when a previous results file exists with a match"""
-    user = MockUser("", "", "1", "", "", "")
-    with patch("builtins.open", mock_open(read_data=mock_csv_file)):
+    user = MockUser("", "", "1", "", "", "", "")
+    with unittest.mock.patch(
+        "builtins.open", unittest.mock.mock_open(read_data=mock_csv_file)
+    ):
         functions.previous_results(user)
     out, err = capfd.readouterr()
     expected_output = (
@@ -58,7 +57,7 @@ def test_previous_results(capfd, mock_csv_file):
     assert any(expected_output in row for row in out.split("\n"))
 
     """Test Case 3: checking expected results when a previous results file doesn't exist"""
-    with patch("builtins.open", side_effect=FileNotFoundError()):
+    with unittest.mock.patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
             functions.previous_results("test_user")
 
@@ -72,16 +71,18 @@ def test_certified_players():
     with open(players_csv, "w") as f:
         f.write("12345,2023-04-30,2024-10-31")
 
-    with patch.object(builtins, "open", MagicMock(return_value=open(players_csv, "r"))):
-        with patch("builtins.print") as mock_print:
+    with unittest.mock.patch.object(
+        builtins, "open", unittest.mock.MagicMock(return_value=open(players_csv, "r"))
+    ):
+        with unittest.mock.patch("builtins.print") as mock_print:
             functions.certified_players()
             mock_print.assert_called_with("\n12345,2023-04-30,2024-10-31\n")
 
     os.remove(players_csv)
 
     """Test Case 2: checking expected results when there is no certified players file"""
-    with patch.object(builtins, "open", side_effect=FileNotFoundError):
-        with patch("builtins.print") as mock_print:
+    with unittest.mock.patch.object(builtins, "open", side_effect=FileNotFoundError):
+        with unittest.mock.patch("builtins.print") as mock_print:
             functions.certified_players()
 
             expected_output = "\n❗ No certified players on file - please contact WFDF\n"
@@ -94,13 +95,13 @@ def test_certified_players():
 def test_check_email():
     """Test Case 1: checking expected results with a valid email format"""
     user = type("obj", (object,), {"email": "jane.doe@example.com"})
-    with patch("sys.stdout", new=StringIO()) as fake_out:
+    with unittest.mock.patch("sys.stdout", new=io.StringIO()) as fake_out:
         functions.check_email(user)
         assert fake_out.getvalue() == ""
 
     """Test Case 2: checking expected results with an invalid email format"""
     user = type("obj", (object,), {"email": "janedoe@example"})
-    with patch("builtins.input", return_value="janedoe@example.com"):
+    with unittest.mock.patch("builtins.input", return_value="janedoe@example.com"):
         functions.check_email(user)
         assert user.email == "janedoe@example.com"
 
@@ -121,10 +122,10 @@ def test_menu_selection(monkeypatch):
 
 
 def test_fail_quiz():
-    user = MockUser("", "", "11111", "10", "2023-05-05", "")
+    user = MockUser("", "", "11111", "10", "2023-05-05", "", "")
 
     """Test Case 1: checking that correct output text is displayed based on user quiz"""
-    with patch("builtins.print") as mock_print:
+    with unittest.mock.patch("builtins.print") as mock_print:
         functions.fail_quiz_text(user)
 
         expected_output = (
@@ -136,7 +137,7 @@ def test_fail_quiz():
     # TODO mock write to file and check it has the expected output
 
     """Test Case 3: checking expected results when a previous results file doesn't exist"""
-    with patch("builtins.open", side_effect=FileNotFoundError()):
+    with unittest.mock.patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
             functions.fail_quiz_results(user)
 
@@ -145,20 +146,20 @@ def test_fail_quiz():
 
 
 def test_pass_quiz():
-    user = MockUser("", "", "11111", "17", "2023-05-05", "2024-11-05")
+    user = MockUser("", "", "11111", "17", "2023-05-05", "2024-11-05", "")
 
     """Test Case 1: checking that correct output text is displayed based on user quiz"""
-    with patch("builtins.print") as mock_print:
+    with unittest.mock.patch("builtins.print") as mock_print:
         functions.pass_quiz_text(user)
 
-        expected_output = "You are now certified until 2024-11-05"
+        expected_output = "You are now certified until 2024-11-05\n"
         mock_print.assert_called_with(expected_output)
 
     """Test Case 2: checking expected results when a previous results file does exist"""
     # TODO mock write to file and check it has the expected output
 
     """Test Case 3: checking expected results when a previous results file doesn't exist"""
-    with patch("builtins.open", side_effect=FileNotFoundError()):
+    with unittest.mock.patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
             functions.pass_quiz_results(user)
 
@@ -166,9 +167,49 @@ def test_pass_quiz():
     # TODO mock write to file and check it has the expected output
 
     """Test Case 5: checking expected results when a certified players file doesn't exist"""
-    with patch("builtins.open", side_effect=FileNotFoundError()):
+    with unittest.mock.patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
             functions.pass_quiz_certified(user)
 
 
 """Test 7: New Quiz"""
+
+
+def test_new_quiz(monkeypatch):
+    """Test Case 1: checking that user score calculation is operating as expected"""
+    user = MockUser("", "", "", "", "", "", "")
+
+    questions_csv = csv.reader(open("tests/test_quiz_questions.csv", "r"))
+    quiz_dict = {}
+    for row in questions_csv:
+        quiz_dict[row[0]] = row[1:]
+    user.questions = random.sample(list(quiz_dict.items()), k=20)
+
+    inputs = iter(
+        [
+            "True",
+            "true",
+            "True",
+            "true",
+            "True",
+            "true",
+            "True",
+            "true",
+            "True",
+            "true",
+            "True",
+            "true",
+            "True",
+            "false",
+            "false",
+            "false",
+            "false",
+            "false",
+            "false",
+            "false",
+        ]
+    )
+    monkeypatch.setattr("builtins.input", lambda prompt: next(inputs))
+
+    functions.run_quiz(user)
+    assert user.user_score == 13

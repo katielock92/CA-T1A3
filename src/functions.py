@@ -19,13 +19,15 @@ import styles
 
 
 class User:
-    """Defines what features each unique user needs.
+    """Defines what attributes each unique user needs.
 
     Attributes:
         user_id: the unique integer User ID for this user
     """
 
-    def __init__(self, email, password, user_id, user_score, attempt_date, expiry_date):
+    def __init__(
+        self, email, password, user_id, user_score, attempt_date, expiry_date, questions
+    ):
         """Initialises the instance for each user."""
         self.email = email
         self._password = password
@@ -33,9 +35,10 @@ class User:
         self.user_score = user_score
         self.attempt_date = attempt_date
         self.expiry_date = expiry_date
+        self.questions = questions
 
 
-user = User("", "", "", "", "", "")
+user = User("", "", "", "", "", "", "")
 
 
 def welcome():
@@ -46,15 +49,15 @@ def welcome():
         )
     )
     print(colored.stylize("Accreditation Quiz App!\n", styles.blue_bold))
-    # time.sleep(1)
+    time.sleep(1)
     print(
         "You can use this app to test your knowledge of the rules of Ultimate and "
         "become a certified player.\n"
     )
-    # time.sleep(1.5)
+    time.sleep(1.5)
     rules_link = colored.stylize("https://rules.wfdf.org/", styles.blue_bold)
     print(f"The official rules can be viewed here: {rules_link}\n")
-    # time.sleep(1.5)
+    time.sleep(1.5)
     print("Documentation for this app can be found here: x")
     print(
         colored.stylize(
@@ -62,7 +65,7 @@ def welcome():
             styles.blue_bold,
         )
     )
-    # time.sleep(1.5)
+    time.sleep(1.5)
 
 
 def login():
@@ -226,7 +229,7 @@ def menu_decision():
         try:
             user_decision = int(user_decision)
             if user_decision == 1:
-                quiz()
+                check_quiz()
 
             elif user_decision == 2:
                 previous_results(user)
@@ -270,6 +273,26 @@ def menu_decision():
             continue
 
 
+def check_quiz():
+    """Error handling provision in case quiz questions file goes missing"""
+    try:
+        with open("./src/quiz_questions.csv", "r"):
+            pass
+        quiz()
+    except FileNotFoundError:
+        print(
+            emoji.emojize(
+                colored.stylize(
+                    "\n:red_exclamation_mark: Error! Quiz questions missing.\nPlease contact app creator to rectify.",
+                    styles.red_bold,
+                )
+            )
+        )
+        print(colored.stylize("\nReturning to the main menu...\n", styles.blue_bold))
+        time.sleep(1.5)
+        return
+
+
 def quiz():
     """Outer loop for the quiz feature"""
     print(
@@ -294,8 +317,6 @@ def quiz():
         new_quiz(user)
         if user.user_score >= 17:
             pass_quiz(user)
-            print(colored.stylize("\nReturning the main menu...\n", styles.blue_bold))
-            time.sleep(1.5)
             break
 
         else:
@@ -307,11 +328,12 @@ def quiz():
                 continue
             else:
                 print(
-                    colored.stylize("\nReturning the main menu...\n", styles.blue_bold)
+                    colored.stylize(
+                        "\nReturning to the main menu...\n", styles.blue_bold
+                    )
                 )
                 time.sleep(1.5)
                 return
-
     menu_or_quit()
 
 
@@ -321,9 +343,13 @@ def new_quiz(user):
     quiz_dict = {}
     for row in questions_csv:
         quiz_dict[row[0]] = row[1:]
-    questions = random.sample(list(quiz_dict.items()), k=20)
+    user.questions = random.sample(list(quiz_dict.items()), k=20)
+    run_quiz(user)
+
+
+def run_quiz(user):
     user.user_score = 0
-    for i, question in enumerate(questions):
+    for i, question in enumerate(user.questions):
         print(colored.stylize(f"\nQuestion {i+1}:", styles.blue_bold))
         print(colored.stylize(f"{question[0]}\n", styles.blue))
         while True:
@@ -378,7 +404,9 @@ def pass_quiz_text(user):
     )
     print(colored.stylize(f"Your score was {user.user_score}/20", styles.bold))
     print(
-        colored.stylize(f"You are now certified until {user.expiry_date}", styles.bold)
+        colored.stylize(
+            f"You are now certified until {user.expiry_date}\n", styles.bold
+        )
     )
 
 
@@ -538,3 +566,7 @@ def menu_or_quit():
     ).lower()
     if prompt == "quit":
         quit()
+    else:
+        print(colored.stylize("\nReturning to the main menu...\n", styles.blue_bold))
+        time.sleep(1.5)
+        return

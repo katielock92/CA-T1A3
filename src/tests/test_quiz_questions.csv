@@ -1,0 +1,182 @@
+"A 'Pick' is called while the disc is in the air and the receiver drops the disc.
+If the receiver believes the 'Pick' call affected the play, then the disc goes back to the thrower.",TRUE
+"A defender from Team A intercepts a pass in-bounds and their momentum takes them out-of-bounds.
+A player from Team B is within 3 metres of the pivot location.
+The player from Team B can start stalling as soon as the defender catches the pass.",TRUE
+"A defender initiates a stoppage incorrectly while the disc is in the air.
+The opposition drops the disc.
+The disc must be returned to the thrower, regardless of whether the call or event affected the outcome.",TRUE
+"A defensive receiving foul is called as two players attempt to catch the disc.
+The call is contested and the disc is returned to the thrower to restart play.
+All players must return to where they were when the thrower released the disc.",TRUE
+"A defensive receiving foul is called.
+The call is contested and the disc is returned to the thrower.
+The two players involved in the foul call must stay where they were when the foul occurred.",TRUE
+"A marking infraction is called by the thrower.
+The thrower makes a completed pass.
+The marker contests the marking infraction.
+The result of the pass stands.",TRUE
+"A pass from Team A is intercepted in the central zone by a player from Team B.
+The player from Team B then intentionally drops the disc.
+This is a 'double turnover' and Team A can now take possession.",TRUE
+"A pass from Team A is intercepted in the central zone by a player from Team B.
+The player from Team B then intentionally drops the disc.
+The player from Team B must re-establish possession.",TRUE
+"A player from Team A drops a catch in the central zone.
+The disc stays at the location of the dropped catch.
+Team B must move at walking pace or faster to retrieve the disc, but there is no time limit.",TRUE
+"A player from Team A drops a catch in the end zone.
+The disc stays at the location of the dropped catch.
+Team B must put the disc into play within 10 seconds of the disc coming to rest.",TRUE
+"A player initiates a stoppage incorrectly while the disc is in the air.
+The opposition catches the disc.
+The disc must be returned to the thrower.",TRUE
+"A player initiates a stoppage incorrectly while the disc is in the air.
+The opposition catches the disc.
+The pass stands.",TRUE
+"A player jumps from out-of-bounds.
+They catch the disc in the air and they land in-bounds.
+The catch stands.",TRUE
+"A player makes a bid and causes an accepted receiving foul.
+During the bid they hurt their knee and they call injury.
+They must choose either to be substituted, or to charge their own team with a Time-Out.",TRUE
+"A receiver is in the process of establishing possession of the disc.
+The receiver is fouled by a defensive player before establishing possession.
+The contact caused the receiver to establish possession out-of-bounds instead of in-bounds.
+The receiver can call a Force-out Foul.",TRUE
+"A receiver is in the process of establishing possession of the disc.
+The receiver is fouled by a defensive player before establishing possession.
+The contact caused the receiver to catch the disc in the central zone instead of their attacking end zone.
+Play continues without a stoppage.",TRUE
+"An offensive player catches the disc in the end zone they are attacking.
+They then lose possession due to ground contact related to the catch.
+The disc hits the ground.
+This is a turnover.",TRUE
+"An offensive player catches the disc in-bounds.
+Their momentum causes them to leave the central zone and go out-of-bounds.
+They must establish a pivot in-bounds at the nearest point on the perimeter line.",TRUE
+"An offensive player catches the disc in-bounds.
+Their momentum causes them to leave the central zone and go out-of-bounds.
+They must restart play with a ground tap.",TRUE
+"An offensive player catches the disc in-bounds.
+Their momentum causes them to leave the central zone and go out-of-bounds.
+They must establish a pivot point in-bounds at the location where they crossed the perimeter line.",TRUE
+"An opponent has called a foul against your team-mate.
+The two players are discussing the call.
+You are playing the point and had a good view of the play.
+You saw evidence that your team-mate did commit a foul.
+Your team-mate decides to contest the foul.
+It is good spirit to tell them you think it was a foul.",TRUE
+"Player A establishes possession of a pass very close to the end zone.
+A few seconds later Player A calls 'goal'.
+There is a discussion which determines Player A was in the central zone when they caught the pass, not the end zone.
+All players must return to where they were when Player A said 'goal'.",TRUE
+"The defence (Team A) is offside for the pull.
+The offence (Team B) calls offside while the disc is still in the air.
+The offence drops the pull.
+Team B can pick the disc up and establish a pivot point as per the offside rule.",TRUE
+"The marker is illegally positioned.
+There is non-minor contact between the thrower and the marker.
+This is a foul by the marker.",TRUE
+"The pull hits the ground and is rolling along the ground.
+Player A, on offence, stops the disc rolling by picking up the disc.
+Player A immediately puts the disc back on the ground
+This is a turnover.",TRUE
+"The thrower and the marker are both vying for the same unoccupied position.
+A marker is legally positioned.
+Non-minor contact occurs.
+This is an off-setting foul.",TRUE
+"The thrower calls a foul on the marker as they make a pass.
+The intended receiver drops the pass but calls a foul on their defender.
+The defender contests the receiving foul, but the marker does not contest the marking foul.
+The disc is returned to the thrower.
+The stall count should restart at 'Stalling 6'.",TRUE
+"The thrower calls a marking violation for repeated double teams.
+At the same time the thrower attempts a pass.
+The pass is incomplete.
+The disc comes back to the thrower.",TRUE
+"The thrower calls a marking violation for repeated marking infractions.
+At the same time the thrower attempts a pass.
+The pass is incomplete.
+The disc must come back to the thrower.",TRUE
+"The thrower establishes a pivot point at the wrong spot.
+A travel is called.
+The thrower still has the disc.
+The thrower establishes a pivot point at the correct spot.
+The thrower must wait until the marker resumes the stall count before they can make a pass.",TRUE
+"The thrower fakes a pass.
+As they do, they move their foot away from the pivot location.
+The marker calls travel and points to the correct pivot location.
+The thrower establishes a pivot at the correct location.
+The marker must say 'Stalling' before resuming the stall count.",TRUE
+"The thrower has the disc.
+A defender calls pick.
+A pass is attempted and it is intercepted in the air by another defender.
+The disc must return to the thrower, even if the pick, and the pick call, did not affect the play.",TRUE
+"There has been a time-out during play.
+The defence changes the player who is marking the thrower.
+The stall count must restart at Stalling 1.",TRUE
+"There is a contested receiving foul.
+The disc is returned to the thrower.
+The stall count is at 'Stalling 6'.
+A defender moves before the check and a violation is called.
+The defender accepts that they moved before the check.
+The stall count must remain at 'Stalling 6' when play restarts.",TRUE
+A 'catch' is defined as when a player demonstrates sustained control of a non-spinning disc.,TRUE
+A 'Straddle' is defined as when a line between a defensive player's feet contains the thrower's pivot point.,TRUE
+A 'Straddle' marking infraction may be called by any opposing player.,TRUE
+"A Blocking Foul occurs when a player takes a position that an opponent moving in a legal manner will be unable to avoid, taking into account the opponents expected position based on their established speed and direction, and non-minor contact results.",TRUE
+A defender can purposefully bobble the disc to themselves for the sole purpose of moving in a specific direction.,TRUE
+A defender is guarding an offensive player when they are within five meters of that offensive player and are reacting to that offensive player.,TRUE
+A force-out foul can only occur if a player is in the air when they are fouled.,TRUE
+"A pass is not 'down' if a receiver catches a pass before the disc contacts the ground, and maintains the catch while the disc is in contact with the ground.",TRUE
+"A pick can occur when a defender is obstructed by another player, and this prevents them from moving towards/with the opponent they are guarding.",TRUE
+A pick can occur when any player is prevented from moving towards/with their opponent by another player.,TRUE
+"A player intentionally initiating minor contact is still a breach of the rules, but is to be treated as a violation, and not a foul.",TRUE
+A player may call a violation regarding the check if their teammate was not in the appropriate position.,TRUE
+A turnover is considered a violation.,TRUE
+After a 'stall-out' turnover play must stop.,TRUE
+After a turnover out-of-bounds the thrower must establish a pivot at the correct spot before they can call a time-out.,TRUE
+An offensive player catches the pull out of bounds. They can still choose to call 'Brick'.,TRUE
+"Any offensive player may take possession of the disc after a turnover, the only exception is after an 'interception' turnover.",TRUE
+Contact with an opponent's arms that occurs after the disc has been caught is a sufficient basis for a foul.,TRUE
+"Contact with an opponent's extended arms or hands that are about to, or already are, contacting the disc, or contact to the throwers hand during the throwing motion, is not considered to be minor contact.",TRUE
+"Contact with an opponent's hands that occurs after the opponent can no longer make a play on the disc is not a sufficient basis for a foul, but should be avoided (excluding contact related to Dangerous Play and Strip).",TRUE
+"If a defender is guarding two opponents, they can still call a pick.",TRUE
+"If a defender runs within 3 metres of the throwers pivot, this is a double team.",TRUE
+"If a novice player is involved in a breach and does not know the rules, experienced players should assist to explain the breach.",TRUE
+"If a player is not reasonably certain that they will be able to make a legal play at the disc before an opponent who is moving in a legal manner, they may call 'Dangerous Play' and the disc will be returned to the thrower.",TRUE
+"If a player is not reasonably certain that they will be able to make a legal play at the disc before an opponent who is moving in a legal manner, they must adjust their movements to avoid initiating contact.",TRUE
+"If a player on offence calls and signals 'Brick', the intended thrower may choose to ignore their teammates call and take it from the sideline.",TRUE
+"If a receiver is deliberately lifted into the air by a teammate to help them catch the disc, this is a turnover.",TRUE
+"If a thrower has multiple options for a pivot point, the marker can choose which is the pivot point.",TRUE
+"If a thrower has multiple options for a pivot point, the pivot point is not determined until they pivot.",TRUE
+If after discussion players cannot agree what would most likely have occurred in a play the disc must be returned to the last non-disputed thrower.,TRUE
+If contact was not made on purpose (ie accidental contact) then this is the same as minor contact.,TRUE
+"If non-minor contact is caused by two opposing players moving towards a single point simultaneously, this is not considered to be a foul on either player and the result of the play should always stand.",TRUE
+"If offensive and defensive players catch the disc simultaneously, the disc is returned to the thrower.",TRUE
+"If play has stopped because of a foul call, two opponents in the stack can agree to move slightly to avoid a potential pick.",TRUE
+"If the disc is on the ground after a stoppage, to restart play the offence player nearest to the disc must call 'Disc In'",TRUE
+"If the marker initiates minor contact with the thrower's chest, the thrower may call 'Contact'.",TRUE
+"If the marker realises that the thrower has established the pivot at the incorrect spot, they can wait until they make a pass before calling travel.",TRUE
+"If the pull lands out-of-bounds without first touching the playing field, the offence can choose to call 'Brick' or 'Middle'.",TRUE
+"If the same marker has been straddling the thrower every time the thrower has the disc, the thrower can call a marking violation and stop play.",TRUE
+"If the thrower calls 'Contact' and it is accepted, play does not stop and the marker must resume the stall count at one (1).",TRUE
+"If the thrower is called for a travel infraction, their teammate can contest the call.",TRUE
+"If the thrower is carrying the disc to the playing field after an out-of-bounds turnover, all other offence players must be stationary",TRUE
+"If you ignored minor travels at the start of the game, it is acceptable to call them once the scores are close and the game is about the end.",TRUE
+It can only be a 'Wrapping' infraction if a line between a defensive player's hands or arms intersects the thrower's torso.,TRUE
+It is solely up to the defence to take reasonable efforts to avoid the occurrence of picks.,TRUE
+Minor contact is defined as 'Contact that involves minimal physical force and does not alter the movements or position of another player.',TRUE
+"People on the side line must not give advice on foul calls, unless they are asked by the players involved.",TRUE
+Pivots and wind-ups are not part of the act of throwing.,TRUE
+Players must be stationary anytime that play is 'dead'.,TRUE
+Teams must get ready for the pull within 10 seconds of the opposition signalling readiness.,TRUE
+The marker must leave a gap of one second between the start of the word 'Stalling' and the start of the word 'One' in a stall count.,TRUE
+"The thrower is allowed to intentionally deflect a pass off an opponent, as long as they move from the spot they threw it before they catch it.",TRUE
+There is an accepted defensive receiving foul in the attacking end zone. The receiver and their defender must move to the goal line before the check.,TRUE
+"To restart play when the thrower has the disc and there is a defender within reach, the defender must touch the disc and must say 'Disc In'.",TRUE
+"To restart play when the thrower has the disc and there is a defender within reach, the defender must touch the disc.",TRUE
+"Whenever a foul or violation call is made, play stops immediately and no turn over is possible . There are no exceptions to this rule.",TRUE
+You can only call dangerous play if contact occurs.,TRUE
+"You can throw while running after catching a pass, as long as you release the disc before your third ground contact, and you do not speed up or change direction until you release the disc.",TRUE
