@@ -26,6 +26,13 @@ class MockUser:
         self.questions = questions
 
 
+class MockFiles:
+    def __init__(self, registered_users, certified_players, previous_results):
+        self.registered_users = registered_users
+        self.certified_players = certified_players
+        self.previous_results = previous_results
+
+
 """Test 1: Previous Results"""
 
 
@@ -109,13 +116,11 @@ def test_check_email():
 """Test 4: Menu Decision"""
 
 
-def test_menu_selection(monkeypatch):
+def test_menu_selection(monkeypatch, capfd):
     """Test Case 1: checking that an error is caught when str input received"""
-    monkeypatch.setattr("builtins.input", lambda _: next("a"))
+    monkeypatch.setattr("builtins.input", lambda prompt: next("a"))
     with pytest.raises(TypeError) or pytest.raises(ValueError):
         functions.menu_decision()
-
-    # TODO add test case for invalid number - currently getting a type error
 
 
 """Test 5: Fail Quiz"""
@@ -123,6 +128,7 @@ def test_menu_selection(monkeypatch):
 
 def test_fail_quiz():
     user = MockUser("", "", "11111", "10", "2023-05-05", "", "")
+    files = MockFiles("", "", "")
 
     """Test Case 1: checking that correct output text is displayed based on user quiz"""
     with unittest.mock.patch("builtins.print") as mock_print:
@@ -134,19 +140,39 @@ def test_fail_quiz():
         mock_print.assert_called_with(expected_output)
 
     """Test Case 2: checking expected results when a previous results file does exist"""
-    # TODO mock write to file and check it has the expected output
+    # Setup:
+    files.previous_results = "tests/test_previous_results.csv"
+    with open(files.previous_results, "w") as f:
+        f.write("User ID,Date,Score,Outcome\n")
+    original_length = 0
+    with open(files.previous_results) as f:
+        reader = csv.reader(f)
+        original_length = sum(1 for row in reader)
+    # Call function:
+    functions.fail_quiz_results(user, files)
+    # Assert:
+    with open(files.previous_results) as f:
+        reader = csv.reader(f)
+        new_length = sum(1 for row in reader)
+    print(original_length)
+    print(new_length)
+    assert new_length == original_length + 1
+    # Cleanup:
+    os.remove(files.previous_results)
 
     """Test Case 3: checking expected results when a previous results file doesn't exist"""
     with unittest.mock.patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
-            functions.fail_quiz_results(user)
+            functions.fail_quiz_results(user, files)
 
 
 """Test 6: Pass Quiz"""
 
 
 def test_pass_quiz():
+    # Class setup
     user = MockUser("", "", "11111", "17", "2023-05-05", "2024-11-05", "")
+    files = MockFiles("", "", "")
 
     """Test Case 1: checking that correct output text is displayed based on user quiz"""
     with unittest.mock.patch("builtins.print") as mock_print:
@@ -156,20 +182,56 @@ def test_pass_quiz():
         mock_print.assert_called_with(expected_output)
 
     """Test Case 2: checking expected results when a previous results file does exist"""
-    # TODO mock write to file and check it has the expected output
+    # Setup:
+    files.previous_results = "tests/test_previous_results.csv"
+    with open(files.previous_results, "w") as f:
+        f.write("User ID,Date,Score,Outcome\n")
+    original_length = 0
+    with open(files.previous_results) as f:
+        reader = csv.reader(f)
+        original_length = sum(1 for row in reader)
+    # Call function:
+    functions.pass_quiz_results(user, files)
+    # Assert:
+    with open(files.previous_results) as f:
+        reader = csv.reader(f)
+        new_length = sum(1 for row in reader)
+    print(original_length)
+    print(new_length)
+    assert new_length == original_length + 1
+    # Cleanup:
+    os.remove(files.previous_results)
 
     """Test Case 3: checking expected results when a previous results file doesn't exist"""
     with unittest.mock.patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
-            functions.pass_quiz_results(user)
+            functions.pass_quiz_results(user, files)
 
     """Test Case 4: checking expected results when a certified players file does exist"""
-    # TODO mock write to file and check it has the expected output
+    # Setup:
+    files.certified_players = "tests/test_certified_players.csv"
+    with open(files.certified_players, "w") as f:
+        f.write("User ID,Certification Date,Expiry Date\n")
+    original_length = 0
+    with open(files.certified_players) as f:
+        reader = csv.reader(f)
+        original_length = sum(1 for row in reader)
+    # Call function:
+    functions.pass_quiz_certified(user, files)
+    # Assert:
+    with open(files.certified_players) as f:
+        reader = csv.reader(f)
+        new_length = sum(1 for row in reader)
+    print(original_length)
+    print(new_length)
+    assert new_length == original_length + 1
+    # Cleanup:
+    os.remove(files.certified_players)
 
     """Test Case 5: checking expected results when a certified players file doesn't exist"""
     with unittest.mock.patch("builtins.open", side_effect=FileNotFoundError()):
         with pytest.raises(FileNotFoundError):
-            functions.pass_quiz_certified(user)
+            functions.pass_quiz_certified(user, files)
 
 
 """Test 7: New Quiz"""

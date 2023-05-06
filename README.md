@@ -296,16 +296,15 @@ The unit tests through Pytest that I have prepared are as follows:
    2. Checks for expected results when an invalid email is entered
 4. **Testing the Menu Selection feature:**
    1. Checks that the expected error is thrown when non-integer input is received
-   2. x
 5. **Testing the Fail Quiz sub-feature of the Quiz feature:**
    1. Confirms that the correct text is returned when a user fails the quiz
-   2. x
+   2. Confirms that the results .csv file increases by one row when a user fails the quiz
    3. Checks that a FileNotFound error occurs when the .csv file for previous results is missing
 6. **Testing the Pass Quiz sub-feature of the Quiz feature:**
    1. Confirms that the correct text is returned when a user passes the quiz
-   2. x
+   2. Confirms that the results .csv file increases by one row when a user passes the quiz
    3. Checks that a FileNotFound error occurs when the .csv file for previous results is missing
-   4. x
+   4. Confirms that the certified players .csv file increases by one row when a user passes the quiz
    5. Checks that a FileNotFound error occurs when the .csv file for certified players is missing
 7. **Testing the Run Quiz sub-feature of the Quiz feature:**
    1. Checks the user score calculates as expected
