@@ -214,7 +214,9 @@ def check_password():
     """Checks that the password a new user is in a valid format"""
     valid_password = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$"
     while True:
-        if re.fullmatch(valid_password, user._password):
+        if user._password == "quit":
+                quit()
+        elif re.fullmatch(valid_password, user._password):
             break
         else:
             print(

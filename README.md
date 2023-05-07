@@ -341,30 +341,3 @@ Some of the key elements of this styling guide that I implemented with my code a
 
 1. Google Python Style Guide (Google), https://google.github.io/styleguide/pyguide.html
 2. Rules of Ultimate (World Flying Disc Association), https://rules.wfdf.org/
-
-___
-### Presentation Requirements:
-
-A slide-deck must be created and video presentation recorded of you running through this slide deck.
-
-This presentation much include:
-
-- A walk-through of your Terminal application, its features and how it used
-- A walk-through of the logic of your Terminal application and code (ensure to run through the important parts of your code, including any crucial application logic)
-- A review of your development/build process including challenges, ethical issues, favourite parts, etc 
-
-The maximum time for the presentation is 10 minutes.
-
-### Code Requirements:
-
-- Creates an application which runs without error and has features that are consistent with the development plan. **(FOR HD: NO ERRORS)**
-
-- Design TWO tests which check that the application is running as expected.
-
-  Each test should:
-
-  - cover a different feature of the application
-  - state what is being tested
-  - provide at least TWO test cases and the expected results for each test case
-
-  > An outline of the testing procedure and cases should be included with the source code of the application.
