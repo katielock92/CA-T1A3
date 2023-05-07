@@ -19,7 +19,7 @@
 ## Links
 
 - GitHub repo: https://github.com/katielock92/CA-T1A3
-- Presentation: x
+- Presentation: https://www.loom.com/share/301927493cbc44eba411ed480705e228
 - Trello board: https://trello.com/b/93Hv7cLh/t1a3-terminal-application-project-management
 
 ---

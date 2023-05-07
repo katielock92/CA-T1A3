@@ -144,6 +144,7 @@ def login():
                         "Your password must meet the following conditions:\n"
                         "- Contains at least one lower case letter\n"
                         "- Contains at least one upper case letter\n"
+                        "- Contains at least one number\n"
                         "- Contains 10 or more characters\n"
                     )
                     user._password = maskpass.askpass(prompt="New password: ", mask="*")
