@@ -1,6 +1,31 @@
-"""This module contains the primary feature functions for this application.
+"""This module contains the feature functions for this application.
 
-This module is designed to be used in conjunction with main.py for operation of the login feature, along with all menu features of the quiz application.
+This module is designed to be used in conjunction with main.py for operation 
+of the login feature, along with all menu features of the quiz application.
+
+This app was developed for educational purposes only.
+
+MIT License
+
+Copyright (c) 2023 Katie Lock
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 """
 
 import sys
@@ -97,9 +122,10 @@ def login():
             "To login or register, please enter your email address: ", styles.bold
         )
     ).lower()
-    check_email(user)
     if user.email == "quit":
         quit()
+    else:
+        check_email(user)
     while True:
         try:
             with open(files.registered_users, "r") as f:
@@ -113,12 +139,14 @@ def login():
                     return_login()
 
                 else:
-                    print("\nTo sign up, please set your password.")
-                    print("Your password must meet the following conditions:")
-                    print("- Contains at least one lower case letter")
-                    print("- Contains at least one upper case letter")
-                    print("- Contains 10 or more characters\n")
-                    user._password = maskpass.askpass(prompt="New password: ", mask="#")
+                    print(
+                        "\nTo sign up, please set your password.\n"
+                        "Your password must meet the following conditions:\n"
+                        "- Contains at least one lower case letter\n"
+                        "- Contains at least one upper case letter\n"
+                        "- Contains 10 or more characters\n"
+                    )
+                    user._password = maskpass.askpass(prompt="New password: ", mask="*")
                     check_password()
                     new_user()
                 time.sleep(2)
@@ -133,13 +161,13 @@ def login():
 def return_login():
     """For validating existing registered users"""
     print(colored.stylize("\nWelcome back!\n", styles.blue_bold))
-    user._password = maskpass.askpass(prompt="Please enter your password: ", mask="#")
+    user._password = maskpass.askpass(prompt="Please enter your password: ", mask="*")
     while True:
         found_user = False
         for index, row in pd.read_csv(files.registered_users).iterrows():
             if user._password == "quit":
                 quit()
-            if (
+            elif (
                 row["user_email"] == user.email
                 and row["user_password"] == user._password
             ):
@@ -156,7 +184,7 @@ def return_login():
                 )
             )
             user._password = maskpass.askpass(
-                prompt="Please enter your password: ", mask="#"
+                prompt="Please enter your password: ", mask="*"
             )
             found_user = True
 
@@ -192,20 +220,22 @@ def check_password():
             print(
                 emoji.emojize(
                     colored.stylize(
-                        "\n:red_exclamation_mark: Password does not meet required format, please try again.\n",
+                        "\n:red_exclamation_mark: Password does not meet required format, "
+                        "please try again.\n",
                         styles.red_bold,
                     )
                 )
             )
-            user._password = maskpass.askpass(prompt="New password: ", mask="#")
+            user._password = maskpass.askpass(prompt="New password: ", mask="*")
             continue
 
 
 def new_user():
     """Saving the successful registration of a new user"""
-    with open("registered_users.csv", "r") as f:
+    with open(files.registered_users, "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            """Assigns random unique user ID"""
             user.user_id = random.randint(1000, 50000)
             user.user_id = str(user.user_id)
             if row["user_id"] == user.user_id:
@@ -234,10 +264,15 @@ def main_menu():
             )
         )
     )
-    print(colored.stylize("1: Begin the Rules Accreditation Quiz", styles.blue))
-    print(colored.stylize("2: See your previous results", styles.blue))
-    print(colored.stylize("3: Access the database of certified players", styles.blue))
-    print(colored.stylize("4: Exit application\n", styles.blue))
+    print(
+        colored.stylize(
+            "1: Begin the Rules Accreditation Quiz\n"
+            "2: See your previous results\n"
+            "3: Access the database of certified players\n"
+            "4: Exit application\n",
+            styles.blue,
+        )
+    )
 
 
 def menu_decision():
@@ -269,15 +304,10 @@ def menu_decision():
                 print(
                     emoji.emojize(
                         colored.stylize(
-                            "\n:red_exclamation_mark: Invalid menu option selected! Please try again.\n",
+                            "\n:red_exclamation_mark: Invalid menu option selected! Please try again.\n"
+                            "Here's the menu again for you...\n",
                             styles.red_bold,
                         )
-                    )
-                )
-                print(
-                    colored.stylize(
-                        "Here's the menu again for you...\n",
-                        styles.red_bold,
                     )
                 )
                 time.sleep(1)
@@ -287,7 +317,8 @@ def menu_decision():
             print(
                 emoji.emojize(
                     colored.stylize(
-                        "\n:red_exclamation_mark: That wasn't a number! Please try again.\nHere's the menu again for you...\n",
+                        "\n:red_exclamation_mark: That wasn't a number! Please try again.\n"
+                        "Here's the menu again for you...\n",
                         styles.red_bold,
                     )
                 )
@@ -306,7 +337,8 @@ def check_quiz():
         print(
             emoji.emojize(
                 colored.stylize(
-                    "\n:red_exclamation_mark: Error! Quiz questions missing.\nPlease contact app creator to rectify.",
+                    "\n:red_exclamation_mark: Error! Quiz questions missing.\n"
+                    "Please contact app creator to rectify.",
                     styles.red_bold,
                 )
             )
@@ -338,6 +370,8 @@ def quiz():
         quit()
     while True:
         new_quiz(user)
+        user.attempt_date = datetime.date.today()
+
         if user.user_score >= 17:
             pass_quiz(user)
             break
@@ -383,7 +417,8 @@ def run_quiz(user):
                 print(
                     emoji.emojize(
                         colored.stylize(
-                            "\n:red_exclamation_mark: Are you sure you want to quit? Your progress will be lost.",
+                            "\n:red_exclamation_mark: Are you sure you want to quit? "
+                            "Your progress will be lost.",
                             styles.red_bold,
                         )
                     )
@@ -425,10 +460,11 @@ def pass_quiz_text(user):
             )
         )
     )
-    print(colored.stylize(f"Your score was {user.user_score}/20", styles.bold))
     print(
         colored.stylize(
-            f"You are now certified until {user.expiry_date}\n", styles.bold
+            f"Your score was {user.user_score}/20\n"
+            f"You are now certified until {user.expiry_date}\n",
+            styles.bold,
         )
     )
 
@@ -469,7 +505,6 @@ def pass_quiz_results(user, files):
 
 def pass_quiz(user):
     """Executes when the user passes the quiz"""
-    user.attempt_date = datetime.date.today()
     user.expiry_date = user.attempt_date + datetime.timedelta(days=550)
     pass_quiz_text(user)
     pass_quiz_certified(user, files)
@@ -487,14 +522,14 @@ def fail_quiz_text(user):
     )
     print(
         colored.stylize(
-            f"\nYour score was {user.user_score}/20 and a score of at least 85% is required to pass.\n",
+            f"\nYour score was {user.user_score}/20 and a score of at least "
+            "85% is required to pass.\n",
             styles.bold,
         )
     )
 
 
 def fail_quiz_results(user, files):
-    user.attempt_date = datetime.date.today()
     try:
         with open(files.previous_results, "a") as results:
             write_results = csv.writer(results)

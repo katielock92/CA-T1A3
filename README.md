@@ -309,6 +309,9 @@ The unit tests through Pytest that I have prepared are as follows:
 7. **Testing the Run Quiz sub-feature of the Quiz feature:**
    1. Checks the user score calculates as expected
 
+At the time of submission, all tests are currently passing:
+![Screenshot of  successful tests in Pytest](docs/Pytest.png)
+
 ---
 
 ## Code Styling Guide
